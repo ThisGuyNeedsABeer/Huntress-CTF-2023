@@ -1,0 +1,18 @@
+Challenge: Rogue Inbox
+Category: Forensics
+Difficulty: medium
+Author: @squiggles
+Description: You've been asked to audit the Microsoft 365 activity for a recently onboarded as a customer of your MSP.
+
+Your new customer is afraid that Debra was compromised. We received logs exported from Purview... can you figure out what the threat actor did? It might take some clever log-fu!
+
+Download the file(s) below.
+Attachments: purview.csv
+
+Solution:
+1. Open the CSV
+2. Navigate to the lines containing "New-InboxRule"
+3. Read down the lines and it will spell "flag{24c4230fa7d50eef392b2c850f74b0f6}"
+	a. To get to the first instance, search "f" and read vertically
+	b. cat purview.csv | grep flag | sed 's/""//g'| grep -o "Name,Value:." | cut -d ':' -f2| tr '\n' ' ' | sed 's/ //g' 
+4. Flag: flag{24c4230fa7d50eef392b2c850f74b0f6}

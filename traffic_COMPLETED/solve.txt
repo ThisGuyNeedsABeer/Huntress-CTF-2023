@@ -1,0 +1,33 @@
+Challenge: Traffic
+Category: Forensics
+Difficulty: medium
+Author: @JohnHammond
+Description: 
+
+We saw some communication to a sketchy site... here's an export of the network traffic. Can you track it down?
+
+Some tools like rita or zeek might help dig through all of this data!
+
+Solution 1: 
+
+1. Install Rita on Remnux: https://github.com/activecm/rita
+2. Extract traffic.7z to indidivudal logs in .gz (extract them all to raw .log)
+3. Move all logs to a folder ~/CTF/huntressctf2023/forensics/traffic/
+4. Enter that directory
+5. Load logs into Rita and generate a report for viewing
+6. Import logs to Rita: 
+	a. "rita import . traffic" (. denotes all files in current directory, traffic is the name of the database to store data in)
+7. Generate an html report for easy viewing
+	a. "rita html-report traffic"
+8. Look through the DNS tab to see web traffic
+	a. sketchysite.github.io is listed
+9. Curl website (or visit if this is a safe VM)
+	a. curl -L https://sketchysite.github.io
+	b. find flag: flag{8626fe7dcd8d412a80d0b3f0e36afd4a}
+
+Solution 2:
+
+1. Move to the directory with all of the logs extracted
+2. "grep -R sketch"
+3. curl -L https://sketchysite.github.io
+	a.find flag: flag{8626fe7dcd8d412a80d0b3f0e36afd4a}

@@ -1,0 +1,18 @@
+Challenge: Dumpster Fire
+Category: Forensics
+Difficulty: easy
+Author: @JohnHammond
+Description: We found all this data in the dumpster! Can you find anything interesting in here, like any cool passwords or anything? Check it out quick before the foxes get to it!
+
+Download the file(s) below.
+Attachments: dumpster_fire.tar.xz
+
+Solution:
+
+1. Extract archive
+2. Grep for the usual "challenge, flag, ctf"
+3. Find "challenge" in the Firefox data directory with login.json
+4. Clone firepwd github repo: https://github.com/lclevy/firepwd.git
+5. Dump firefox passwords:
+	a. ~/CTF/tools/firepwd/firepwd.py -d ~/CTF/huntress2023/forensics/dumpster_fire/dumpster_fire_extracted/home/challenge/.mozilla/firefox/bc1m1zlr.default-release/ | grep -o "flag{[^}]*}"
+6. Flag: flag{35446041dc161cf5c9c325a3d28af3e3}

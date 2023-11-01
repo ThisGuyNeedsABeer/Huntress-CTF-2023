@@ -1,0 +1,232 @@
+Challenge: Tragedy Redux
+Category: Forensics
+Difficulty: medium
+Author: @JohnHammond
+Description: We found this file as part of an attack chain that seemed to manipulate file contents to stage a payload. Can you make any sense of it?
+
+Archive password: infected
+
+Download the file(s) below.
+Attachments: tragedy_redux.7z
+
+Solution:
+
+1. Extract tragedy_redux.7z
+	a. 7z x -p infected tragedy_redux.7z
+2. Inspect the extracted file
+	a. file tragedy_redux -> tragedy_redux: Zip archive data, made by v4.5, extract using at least v2.0, last modified, last modified Sun, Jan 01 1980 00:00:00, uncompressed size 1453, method=deflate
+3. Rename tragedy_redux to tragedy_redux.zip
+	a. mv tragedy_redux tragedy_redux.zip
+4. Extract the ZIP archive
+	a. unzip tragedy_redux_zip
+5. Enter Word Directory
+6. Analyze vbaProject.bin with OleTools: https://infosecwriteups.com/maldoc101-malicious-macros-analysis-with-oletools-8be3cda84544
+	a. ┌──(kali㉿kali)-[~/…/huntress2023/forensics/tragedy/word]
+	   └─$ oleid vbaProject.bin 
+		oleid 0.60.1 - http://decalage.info/oletools
+		THIS IS WORK IN PROGRESS - Check updates regularly!
+		Please report any issue at https://github.com/decalage2/oletools/issues
+
+		Filename: vbaProject.bin
+		WARNING  For now, VBA stomping cannot be detected for files in memory
+		--------------------+--------------------+----------+--------------------------
+		Indicator           |Value               |Risk      |Description               
+		--------------------+--------------------+----------+--------------------------
+		File format         |Generic OLE file /  |info      |Unrecognized OLE file.    
+		                    |Compound File       |          |Root CLSID:  - None       
+		                    |(unknown format)    |          |                          
+		--------------------+--------------------+----------+--------------------------
+		Container format    |OLE                 |info      |Container type            
+		--------------------+--------------------+----------+--------------------------
+		Encrypted           |False               |none      |The file is not encrypted 
+		--------------------+--------------------+----------+--------------------------
+		VBA Macros          |Yes, suspicious     |HIGH      |This file contains VBA    
+		                    |                    |          |macros. Suspicious        
+		                    |                    |          |keywords were found. Use  
+		                    |                    |          |olevba and mraptor for    
+		                    |                    |          |more info.                
+		--------------------+--------------------+----------+--------------------------
+		XLM Macros          |No                  |none      |This file does not contain
+		                    |                    |          |Excel 4/XLM macros.       
+		--------------------+--------------------+----------+--------------------------
+		External            |0                   |none      |External relationships    
+		Relationships       |                    |          |such as remote templates, 
+		                    |                    |          |remote OLE objects, etc   
+		--------------------+--------------------+----------+--------------------------
+7. Macros were found, dump the VBA code with "olevba"
+	a. ┌──(kali㉿kali)-[~/…/huntress2023/forensics/tragedy/word]
+	   └─$ olevba --deobf vbaProject.bin 
+		olevba 0.60.1 on Python 3.9.0 - http://decalage.info/python/oletools
+		===============================================================================
+		FILE: vbaProject.bin
+		Type: OLE
+		-------------------------------------------------------------------------------
+		VBA MACRO ThisDocument.cls 
+		in file: vbaProject.bin - OLE stream: 'VBA/ThisDocument'
+		- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+		(empty macro)
+		-------------------------------------------------------------------------------
+		VBA MACRO NewMacros.bas 
+		in file: vbaProject.bin - OLE stream: 'VBA/NewMacros'
+		- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+		Function Pears(Beets)
+		    Pears = Chr(Beets - 17)
+		End Function
+
+		Function Strawberries(Grapes)
+		    Strawberries = Left(Grapes, 3)
+		End Function
+
+		Function Almonds(Jelly)
+		    Almonds = Right(Jelly, Len(Jelly) - 3)
+		End Function
+
+		Function Nuts(Milk)
+		    Do
+		    OatMilk = OatMilk + Pears(Strawberries(Milk))
+		    Milk = Almonds(Milk)
+		    Loop While Len(Milk) > 0
+		    Nuts = OatMilk
+		End Function
+
+
+		Function Bears(Cows)
+		    Bears = StrReverse(Cows)
+		End Function
+
+		Function Tragedy()
+		    
+		    Dim Apples As String
+		    Dim Water As String
+
+		    If ActiveDocument.Name <> Nuts("131134127127118131063117128116") Then
+		        Exit Function
+		    End If
+		    
+		    Apples = "129128136118131132121118125125049062118127116049091088107132106104116074090126107132106104117072095123095124106067094069094126094139094085086070095139116067096088106065107085098066096088099121094101091126095123086069106126095074090120078078"
+		    Water = Nuts(Apples)
+
+
+		    GetObject(Nuts("136122127126120126133132075")).Get(Nuts("104122127068067112097131128116118132132")).Create Water, Tea, Coffee, Napkin
+
+		End Function
+
+		Sub AutoOpen()
+		    Tragedy
+		End Sub
+		+----------+--------------------+---------------------------------------------+
+		|Type      |Keyword             |Description                                  |
+		+----------+--------------------+---------------------------------------------+
+		|AutoExec  |AutoOpen            |Runs when the Word document is opened        |
+		|Suspicious|Create              |May execute file or a system command through |
+		|          |                    |WMI                                          |
+		|Suspicious|GetObject           |May get an OLE object with a running instance|
+		|Suspicious|Chr                 |May attempt to obfuscate specific strings    |
+		|          |                    |(use option --deobf to deobfuscate)          |
+		|Suspicious|StrReverse          |May attempt to obfuscate specific strings    |
+		|          |                    |(use option --deobf to deobfuscate)          |
+		|Suspicious|Hex Strings         |Hex-encoded strings were detected, may be    |
+		|          |                    |used to obfuscate strings (option --decode to|
+		|          |                    |see all)                                     |
+		|Suspicious|VBA obfuscated      |VBA string expressions were detected, may be |
+		|          |Strings             |used to obfuscate strings (option --decode to|
+		|          |                    |see all)                                     |
+		|VBA string|b"\x13\x114\x12q'\x1|Nuts("131134127127118131063117128116")       |
+		|          |1\x811\x061\x17\x12\|                                             |
+		|          |x81\x16"            |                                             |
+		+----------+--------------------+---------------------------------------------+
+8. Save code to tragedy.vbs
+	a. Function Pears(Beets)
+		    Pears = Chr(Beets - 17)
+		End Function
+
+		Function Strawberries(Grapes)
+		    Strawberries = Left(Grapes, 3)
+		End Function
+
+		Function Almonds(Jelly)
+		    Almonds = Right(Jelly, Len(Jelly) - 3)
+		End Function
+
+		Function Nuts(Milk)
+		    Do
+		    OatMilk = OatMilk + Pears(Strawberries(Milk))
+		    Milk = Almonds(Milk)
+		    Loop While Len(Milk) > 0
+		    Nuts = OatMilk
+		End Function
+
+
+		Function Bears(Cows)
+		    Bears = StrReverse(Cows)
+		End Function
+
+		Function Tragedy()
+		    
+		    Dim Apples As String
+		    Dim Water As String
+
+		    If ActiveDocument.Name <> Nuts("131134127127118131063117128116") Then
+		        Exit Function
+		    End If
+		    
+		    Apples = "129128136118131132121118125125049062118127116049091088107132106104116074090126107132106104117072095123095124106067094069094126094139094085086070095139116067096088106065107085098066096088099121094101091126095123086069106126095074090120078078"
+		    Water = Nuts(Apples)
+
+
+		    GetObject(Nuts("136122127126120126133132075")).Get(Nuts("104122127068067112097131128116118132132")).Create Water, Tea, Coffee, Napkin
+
+		End Function
+
+		Sub AutoOpen()
+		    Tragedy
+		End Sub
+9. Clean code to prevent document checks and output variables
+	a. Function Pears(Beets)
+    Pears = Chr(Beets - 17)
+End Function
+Function Strawberries(Grapes)
+    Strawberries = Left(Grapes, 3)
+End Function
+Function Almonds(Jelly)
+    Almonds = Right(Jelly, Len(Jelly) - 3)
+End Function
+Function Nuts(Milk)
+    Do
+    OatMilk = OatMilk + Pears(Strawberries(Milk))
+    Milk = Almonds(Milk)
+    Loop While Len(Milk) > 0
+    Nuts = OatMilk
+End Function
+Function Bears(Cows)
+    Bears = StrReverse(Cows)
+End Function
+
+Function Tragedy()
+    Dim Apples, Water
+    'If ActiveDocument.Name <> Nuts("131134127127118131063117128116") Then ' Null out function to run as .vbs
+    '    Exit Function
+    'End If
+
+    Apples = "129128136118131132121118125125049062118127116049091088107132106104116074090126107132106104117072095123095124106067094069094126094139094085086070095139116067096088106065107085098066096088099121094101091126095123086069106126095074090120078078"
+    Water = Nuts(Apples)
+        Wscript.Echo Water 'Output value of "Water"
+    GetObject(Nuts("136122127126120126133132075")).Get(Nuts("104122127068067112097131128116118132132")).Create Water, Tea, Coffee, Napkin
+End Function
+
+Sub AutoOpen()
+    Tragedy
+End Sub
+
+AutoOpen() 'Execute Tragedy Function via "AutoOpen()"
+
+'Output:
+'echo "JGZsYWc9ImZsYWd7NjNkY2M4MmMzMDE5Nzc2OGY0ZDQ1OGRhMTJmNjE4YmN9Ig==" | base64 -d
+'$flag="flag{63dcc82c30197768f4d458da12f618bc}" 
+
+10. Execute on Windows Sandbox
+	a. Get output: powershell -enc JGZsYWc9ImZsYWd7NjNkY2M4MmMzMDE5Nzc2OGY0ZDQ1OGRhMTJmNjE4YmN9Ig==
+11. Convert Base64
+	a. echo "JGZsYWc9ImZsYWd7NjNkY2M4MmMzMDE5Nzc2OGY0ZDQ1OGRhMTJmNjE4YmN9Ig==" | base64 -d
+12. Get Flag: '$flag="flag{63dcc82c30197768f4d458da12f618bc}" 
+13. Flag: flag{63dcc82c30197768f4d458da12f618bc}

