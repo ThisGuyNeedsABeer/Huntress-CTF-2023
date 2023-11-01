@@ -24,4 +24,7 @@ Official Write-Ups:
 * https://medium.com/@Echo_Slow/huntress-ctf-2023-write-up-ac99d4aa8738
 * https://malwarelab.eu/posts/huntress-ctf-2023/
 * https://bakerstreetforensics.com/2023/11/01/huntress-ctf-week-1-warmups/
-
+* https://github.com/nikip72/huntress-2023/
+* https://jjolley91.github.io/blog/huntress_ctf_2023/ 
+* https://klefz.se/2023/11/01/huntress-ctf-2023-write-up/
+* https://rykergogo.github.io/
