@@ -1,0 +1,38 @@
+Challenge: Snake Eater
+Category: Malware
+Difficulty: easy
+Author: @HuskyHacks
+Description: Hey Analyst, I've never seen an executable icon that looks like this. I don't like things I'm not familiar with. Can you check it out and see what it's doing?
+
+Archive password: infected
+
+NOTE, this challenge is based off of a real malware sample. Windows Defender will probably identify it as malicious. It is strongly encouraged you only analyze this inside of a virtual environment separate from any production devices.
+
+Download the file(s) below.
+Attachments: snake_eater.7z
+
+Solution (Easy)
+1. Extract file
+2. Upload exe to https://tria.ge
+3. After analysis search for flag
+4. Find two entries:
+	a. File Create
+			proc 87
+			path C:\Users\Admin\AppData\Roaming\Microsoft\Windows\flag{d1343a2fc5d8427801dd1fd417f12628}
+			op CreateModify
+			status 0x00000000
+	b. File Read
+			proc 87
+			path C:\Users\Admin\AppData\Roaming\Microsoft\Windows\flag{d1343a2fc5d8427801dd1fd417f12628}
+			op OpenRead
+			status 0x00000000
+5. Flag: flag{d1343a2fc5d8427801dd1fd417f12628}
+
+Solution (Hard)
+1. Extract Python from PyInstaller EXE: https://pyinstxtractor-web.netlify.app/ or https://github.com/extremecoders-re/pyinstxtractor
+2. Attempt to recover source code with pycdc: https://github.com/zrax/pycdc
+3. File is protected with PyArmor
+
+References: 
+1. https://www.fortinet.com/blog/threat-research/unpacking-python-executables-windows-linux
+2. https://github.com/levanvn/FLARE-ON9-Chal11_Unpacking-Pyarmor

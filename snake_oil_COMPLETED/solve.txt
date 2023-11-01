@@ -1,0 +1,77 @@
+Challenge: Snake Oil
+Category: Malware
+Difficulty: medium
+Author: @JohnHammond
+
+Description: One of our workstations was exhibiting strange network communications... we found this binary that looked to be the culprit. Can you find anything suspicious?
+
+Download the file(s) below.
+Attachments: snake-oil
+
+Solution:
+
+1. Inspect file
+	a.  ┌──(kali㉿kali)-[~/CTF/huntress2023/malware/snake_oil]
+		└─$ file snake-oil      
+		snake-oil: PE32+ executable (console) x86-64, for MS Windows, 7 sections
+
+2. Determine that this a Python Executable and extract with pyinstxtractor
+	a.  ┌──(kali㉿kali)-[~/CTF/tools/python-analysis/pyinstxtractor]
+		└─$ python pyinstxtractor.py ~/CTF/huntress2023/malware/snake_oil/snake-oil.exe 
+		[+] Processing /home/kali/CTF/huntress2023/malware/snake_oil/snake-oil.exe
+		[+] Pyinstaller version: 2.1+
+		[+] Python version: 3.9
+		[+] Length of package: 13435879 bytes
+		[+] Found 963 files in CArchive
+		[+] Beginning extraction...please standby
+		[+] Possible entry point: pyiboot01_bootstrap.pyc
+		[+] Possible entry point: pyi_rth_pkgutil.pyc
+		[+] Possible entry point: pyi_rth_multiprocessing.pyc
+		[+] Possible entry point: pyi_rth_inspect.pyc
+		[+] Possible entry point: pyi_rth__tkinter.pyc
+		[+] Possible entry point: pyi_rth_pkgres.pyc
+		[+] Possible entry point: brain-melt.pyc
+		[+] Found 505 files in PYZ archive
+		[+] Successfully extracted pyinstaller archive: /home/kali/CTF/huntress2023/malware/snake_oil/snake-oil.exe
+
+		You can now use a python decompiler on the pyc files within the extracted directory
+
+3. Decompile Python Source code
+	a.  ┌──(kali㉿kali)-[~/…/tools/python-analysis/pyinstxtractor/snake-oil.exe_extracted]
+		└─$ pycdc brain-melt.pyc > ~/CTF/huntress2023/malware/snake_oil/source.py
+		Unsupported opcode: RERAISE
+
+4. Review new plaintext source code and note the following function
+	a.  def decrypt(s1, s2):
+    	return ''.join((lambda .0: [ chr(ord(c1) ^ ord(c2)) for c1, c2 in .0 ])(zip(s1, s2)))
+
+
+		def deobfuscate():
+		    part1 = '2ec7627d{galf'[::-1]
+		    part2 = str(base64.b64decode('NjIwM2I1Y2M2OWY0'.encode('ascii')), 'UTF8')
+		    part3 = decrypt('\x17*\x07`BC\x14*R@\x14^*', 'uKeVuzwIexplW')
+		    key = part1 + part2 + part3
+		    return key
+
+5. Because we likely want "key" based off the value of 'part1' we fix up the code as such and save as solve.py:
+	a.  import io
+		import sys
+		import base64
+
+		def decrypt(s1, s2):
+		    return ''.join([chr(ord(c1) ^ ord(c2)) for c1, c2 in zip(s1, s2)])
+
+		def deobfuscate():
+		    part1 = '2ec7627d{galf'[::-1]
+		    part2 = str(base64.b64decode('NjIwM2I1Y2M2OWY0'.encode('ascii')), 'UTF8')
+		    part3 = decrypt('\x17*\x07`BC\x14*R@\x14^*', 'uKeVuzwIexplW')
+		    key = part1 + part2 + part3
+		    return key
+
+		result = deobfuscate()
+		print(result)
+
+6. Execute new Python script (solve.py)
+	a. flag{d7267ce26203b5cc69f4bab679cc78d2}
+
+7. Flag: flag{d7267ce26203b5cc69f4bab679cc78d2}

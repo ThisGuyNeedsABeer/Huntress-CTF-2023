@@ -1,0 +1,40 @@
+Challenge: BlackCat
+Category: Malware
+Difficulty: easy
+Author: @HuskyHacks
+
+Description: We've been hit by the infamous BlackCat Ransomware Group! We need you to help restore the encrypted files. Please help! My favorite rock got encrypted and I'm a wreck right now!
+
+Archive password: infected
+
+NOTE, this challenge is based off of a real malware sample. Windows Defender will probably identify it as malicious. It is strongly encouraged you only analyze this inside of a virtual environment separate from any production devices.
+
+Download the file(s) below.
+Attachments: blackcat.7z
+
+1. Download and extract the archive
+2. Running the file through Ghidra on a Windows VM tells us the file was written in golang
+3. Entering a some dummy values, we see the decrypter will take any value over 8 characters
+4. We identify the following code block as doing some file operation
+
+           for (iVar3 = 0; iVar3 < 8; iVar3 = iVar3 + 1) {
+             if (local_158 == 0) {
+                     /* WARNING: Subroutine does not return */
+               runtime.panicdivide();
+             }
+             uVar8 = iVar3 % (int)local_158;
+             if (local_158 <= uVar8) {
+                     /* WARNING: Subroutine does not return */
+               runtime.panicIndex(uVar8);
+             }
+             *(byte *)(local_90 + iVar3) = *(byte *)(iVar3 + local_90) ^ *(byte *)(uVar8 + local_c0);
+           }
+
+5. Using an easy XOR tool from Nirsoft we tested some theories of recovery the key: https://www.nirsoft.net/utils/xorfiles.html	
+	a. Filename 1: Huntress-Labs-Logo-and-Text-Black.png <-- Unencrypted
+	b. Filename 2: Huntress-Labs-Logo-and-Text-Black.png.encry <-- Encrypted
+	c. Destination: Key.txt
+6. Using this method we were able to recover the key of "cosmoboi"
+7. Using this key, we can decrypt the contents of flag.txt in CyberChef
+	a. https://gchq.github.io/CyberChef/#recipe=XOR(%7B'option':'UTF8','string':'cosmoboi'%7D,'Standard',false)To_Lower_case()&input=KAoWHQYMCEkOFlMLAwMISQsKAQhPESBJChtUHk8RDg8GTnlnCQ4ODhhfSl9YVlsLVlpHX19SXFogWhYPVgZZWVoKEg5aB1dbUBI
+8. Flag: flag{092744b55420033c5eb9d609eac5e823}

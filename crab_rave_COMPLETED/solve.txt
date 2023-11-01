@@ -1,0 +1,62 @@
+Challenge: Crab Rave
+Category: Malware
+Difficulty: hard
+Author: @HuskyHacks
+
+Description: My biologist friend told me that everything eventually evolves into a crab-like form. I don't know if that's true but I guess malware authors got a head start on that evolution. To save you some time, I went ahead and found you the 10 hour extended version of Crab Rave on YouTube (https://www.youtube.com/watch?v=-50NdPawLVY). You'll need it.
+
+So, here's the deal. This one is tough, so we're giving you a "Choose Your Own Adventure" challenge. Are you super confident with reverse engineering? Try crab_rave_harder.7z. Not so confident with RE? We gave you crab_rave_easier.7z.
+
+Both have the same flag. Both do the same thing. If you solve one, you solve both. No matter which one you go with, it will be challenging. You got this.
+
+Archive password: infected
+
+NOTE, this challenge is based off of a real malware sample. Windows Defender will probably identify it as malicious. It is strongly encouraged you only analyze this inside of a virtual environment separate from any production devices.
+
+Download the file(s) below.
+Attachments: crab_rave_easier.7z OR crab_rave_harder.7z
+
+Solution (easier)
+
+1. Download and open the zip and find a .dll file for review in Ghidra on Windows
+2. After analyzing the code notate some important bits of information in the "inject_flag" function
+
+litcrypt_internal::decrypt_bytes (&local_308,&DAT_103cd840,0x89,"-rr5-rr5-rr5-rr5-rr5-rr5-rr5-rr5-rr5-rr5-rr5-rr5-rr5-rr5-rr5-rr5-r",0x42);
+
+a. When we extract the bytes between the call to DAT_103cd840 from 103cd840 -> 103cd8cf (right click > copy special > byte string), we end up with
+
+45 06 06 45 5e 48 5d 1a 4a 1b 01 41 03 15 1b 41 45 07 10 40 5e 17 00 56 42 1c 06 50 43 06 5c 56 42 1f 5d 7d 58 01 19 4c 65 13 11 5e 5e 5d 4a 56 48 11 17 0d 1a 4a 14 51 48 44 43 00 48 14 4a 02 1a 42 1d 47 4b 51 15 4a 40 04 1c 10 40 50 02 00 13 42 02 13 10 56 4c 14 47 0c 1f 42 13 01 1d 4a 46 06 15 47 43 50 48 11 47 00 1d 16 43 51 4e 13 4b 02 48 4b 46 01 19 13 11 02 18 5d 15 5c 5e 06 14 5c 41 17 1c 5c 06 4d 59 00 00 00 00 00 00 00
+
+b. Reading up on Rust's litcrypt we can see that it performs an XOR on the Hex value: https://docs.rs/litcrypt/latest/litcrypt/
+
+c. Dumping that Hex into Cyber Chef with an XOR using a UTF-8 key of "-rr5-rr5-rr5-rr5-rr5-rr5-rr5-rr5-rr5-rr5-rr5-rr5-rr5-rr5-rr5-rr5-r" yields the following:
+
+https://gist.githubusercontent.com/HuskyHacks/8cece878fde615ef8770059d88211b2e/raw/abcaf5920a40843851eec550d1dca97e9444ac75/gistfile1.txt (after padding trimmed)
+
+3. Analyzing the new Base64 from the gist yields very little useful information
+
+o2WB/eHh3s+SxgR4QUjE9f0yAt4C16oHZvaclKlmBo4K1bsVSbVS2fjxjao/YVUGv7v7Om5xkDjXxARjF6AZalN6pENSgVBQIrYfMq+VeBwwR1whFWRGIC+qulG6HDYmfZt6Va4iljyljxbSnZMrxQwWUXJDhEju2iVzsa1l6nFzoHWO+5+pDV8+sLn3P9jhfZE7qLKVOt7Lm/stSBWZDgzuvqpZziBYo5EumdrISYvWkMm5T2ZD7iRSQaJ3Hr9LUd0nOnfVLW2CyLNmqAM/BKc0f5A9YAoGISmymjc+camULpCiS4WoI8CiyBKOXr5K3CQgx0O9nOn8aS2IU7RreOopH08EGON6DBzkIwbqpC9o28A+wNZsc6cJC0AplIUAafdONBlg/NmcSmkOnPOAR/qhMGMlZKtzEqi4RZDzOfo=
+
+4. If we keep digging and perofming this decryption of the libcrypt content we can get additional information
+
+a. Bytes between 103cd938 (DAT_103cd938) and 103cd945
+
+40 5c 0b 50 42 1f 13 5b 5e 41 42 0d 1d 43 -> m.yeomans30801
+
+b. Bytes between 103cd946 (DAT_103cd946) and 103cd94f
+
+7a 3b 3c 18 69 37 24 18 1c 41 -> WIN-DEV-13
+
+c. Bytes between 103cd950 (DAT_103cd950) and 103cd95a
+
+43 1d 06 50 5d 13 16 1b 48 0a 17 -> notepad.exe
+
+5. Let's take those values and re-create the environment where they were found as running this dll previously has not yielded any results
+
+a. I took a lab VM and named in "WIN-DEV-13"
+b. I created the user "m.yeomans30801" with the password "zerocool123"
+c. I added the user to the local admins group
+d. I launched the DLL with "rundll32 ntcheckos.dll,DLLMain"
+e. A box popped up and said "CONGRATS" with a flag: flag{225215e04306f6a3c1a59400b054b0df}
+
+6. Flag: flag{225215e04306f6a3c1a59400b054b0df}

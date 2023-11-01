@@ -1,0 +1,47 @@
+Challenge: BlackCat II
+Category: Malware - 30 Solves - hard
+Author: @HuskyHacks
+
+Description: Be advised analyst: BlackCat is back! And they're mad. Very mad. Help our poor user recover the images that they downloaded while browsing their favorite art site. Quickly!
+
+Archive password: infected
+
+NOTE, this challenge is based off of a real malware sample. Windows Defender will probably identify it as malicious. It is strongly encouraged you only analyze this inside of a virtual environment separate from any production devices. Password: infected
+
+Download the file(s) below.
+
+Attachments: blackcatII.7z
+
+Solution 1:
+
+1. Running the file we can ascertain from the icon that it is a .NET binary.
+2. Decompiling in JetBraisn DotPeek we can review the source code.
+3. Putting in a dummy value for the decyrption key of "testing" tells us the key needs to be 64 characters.
+4. A search for "Decrypt" yields the following function
+
+    public static void DecryptFiles(string directoryPath, string decryptionKey)
+    {
+      string[] files = Directory.GetFiles(directoryPath, "*.encry");
+      if (files.Length == 0)
+        return;
+      string filePath = (string) null;
+      foreach (string str in files)
+      {
+        string key = filePath != null ? DecryptorUtil.CalculateSHA256Hash(filePath) : decryptionKey;
+        string outputFile = Path.Combine(directoryPath, Path.GetFileNameWithoutExtension(str) + ".decry");
+        DecryptorUtil.AESDecryptFile(str, outputFile, key, DecryptorUtil.hardcodedIV);
+        filePath = outputFile;
+      }
+      Console.WriteLine("[*] Decryption completed.");
+    }
+
+5. Looking at the code it looks like we set the value of "key" from the SHA256 hash of a file and that becomes the "decryptionKey"
+6. A SHA256 hash is also 64 characters, that's convenient
+7. Trying to find the unencrypted files will be critical now to calculating a SHA256 hash
+8. With some clever searching we end up at: https://www.atxfinearts.com/blogs/news/100-most-famous-paintings-in-the-world
+9. "Steal" the corresponding pieces of art but ensure to save them as a .jpg instead of a .webp
+10. I uploaded and unencrypted version of "A_Sunday_Afternoon_on_the_Island_of_La_Grande_Jatte_by_Georges_Seurat_5773ff06-a03e-401b-8914-6106bc277bfd_large.jpg" 
+	to the following website for hash calculation: https://emn178.github.io/online-tools/sha256_checksum.html
+11. Getting the hash: 80d60bddb3b57a28d7c7259103a514cc05507c7b9cf0c42d709bdc93ffc69191
+12. Entered the hash in the program as a decryption key and was able to read flag.txt.decry
+13. Flag: flag{03365961aa6aca589b59c683eecc9659}

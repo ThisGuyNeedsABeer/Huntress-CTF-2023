@@ -1,0 +1,34 @@
+Challenge: RAT
+Category: Malware
+Difficulty: medium
+Author: @JohnHammond
+
+Description: I was arguing with a co-worker on whether or not it is "Remote Access Tool" or "Remote Access Trojan", and he didn't agree with me, so I sent him this shady file ;)
+
+NOTE: Archive password: infected
+
+NOTE, this challenge is based off of a real malware sample. We have done our best to "defang" the code, but out of abudance of caution it is strongly encouraged you only analyze this inside of a virtual environment separate from any production devices.
+
+Download the file(s) below.
+Attachments: rat.7z
+
+Solution:
+
+1. Download attachment and confirm extension
+	a.  ┌──(kali㉿kali)-[~/CTF/huntress2023/malware/rat]
+		└─$ file rat.7z                
+		rat.7z: 7-zip archive data, version 0.4
+
+2. Unzip the password protected .7z
+	a.  ┌──(kali㉿kali)-[~/CTF/huntress2023/malware/rat]
+		└─$ 7z x -pinfected rat.7z
+
+3. Examine the exracted contents
+	a.  ┌──(kali㉿kali)-[~/CTF/huntress2023/malware/rat]
+		└─$ file rat   
+		rat: PE32+ executable (GUI) x86-64 Mono/.Net assembly, for MS Windows, 2 sections
+
+4. Upload to sandboxes for initial review (Hybrid Analysis, Tria.ge, VirusTotal)
+	a. https://www.virustotal.com/gui/file/7a83115ab46ba6a3c237d78f32bd3386ff4d4d7cd7b06ad731fe8071b2246278/behavior
+
+5. Flag: flag{8b988b859588f2725f0c859104919019}

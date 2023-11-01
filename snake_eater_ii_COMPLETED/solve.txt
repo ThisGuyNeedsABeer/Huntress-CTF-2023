@@ -1,0 +1,29 @@
+Challenge: Snake Eater II
+Category:
+Difficulty: medium
+Author: @HuskyHacks
+
+Description: Snake Eater II - Revenge of the Snake Eater
+
+The Threat Actor must have gotten word that you had no trouble dissecting Snake Eater. They said this one is a bit more... involved.
+
+Archive Password: infected
+
+NOTE, this challenge is based off of a real malware sample. Windows Defender will probably identify it as malicious. It is strongly encouraged you only analyze this inside of a virtual environment separate from any production devices.
+
+Download the file(s) below.
+Attachments: snake_eaterII.7z
+
+Solution:
+
+1. Download and extract the attachment
+2. We can ascertain by the file icon this is also a PyInstaller similar to Snake Eater I.
+3. Decompoiling the code with PyInsxtractor: https://github.com/extremecoders-re/pyinstxtractor we see this code is also protected with PyArmor
+4. Running the file in a VM watching with Procmon we can see flag.txt being dropped in AppData
+5. On subsequent runs, the path changes, and a flag.txt is created in another random path and then deleted rapidly.
+	a. C:\Users\VM\AppData\Roaming\Adobe\UXP\PluginsStorage\PHSP\24\Internal\com.adobe.ccx.comments-webview\flag.txt
+6. Since the flag was being deleted from disk, but not zero'd or wrote over from what I could tell I recovered the file
+7. I had Recuva scan the last path that I saw the flag.txt drop and was able to pull it back
+	a. Scanning: C:\Users\Ryan\AppData\Roaming\Adobe\UXP\PluginsStorage\PHSP\24\Internal\com.adobe.ccx.comments-webview\
+	b. Found flag.txt
+8. Flag: flag{be47387ab77251ecf80db1b6725dd7ac}

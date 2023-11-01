@@ -1,0 +1,214 @@
+Challenge: Batchfuscation
+Category: Malware 
+Difficulty: medium
+Author: @JohnHammond
+
+Description: I was reading a report on past Trickbot malware, and I found this sample that looks a lot like their code! Can you make any sense of it?
+
+Download the file below.
+Attachments: batchfuscation
+
+Solution:
+
+1. Download the attachment and determine the file type
+	a.  ┌──(kali㉿kali)-[~/CTF/huntress2023/malware/batchfuscation]
+		└─$ file batchfuscation
+		batchfuscation: DOS batch file, ASCII text, with very long lines (1241)
+
+2. Open the file in Sublime Text (or another editor of your choice)
+	a.  ┌──(kali㉿kali)-[~/CTF/huntress2023/malware/batchfuscation]
+		└─$ subl batchfuscation 
+
+3. Lots of obfuscation going on
+	a. The first fiew lines look to be setting variables
+		i.  set bdevq=set
+			%bdevq% grfxdh= 
+			%bdevq%%grfxdh%mbbzmk==
+			%bdevq%%grfxdh%xeegh%mbbzmk%/
+			%bdevq%%grfxdh%jeuudks%mbbzmk%a
+			%bdevq%%grfxdh%rbiky%mbbzmk%c
+			%bdevq%%grfxdh%wzirk%mbbzmk%m
+			%bdevq%%grfxdh%naikpbo%mbbzmk%d
+			%bdevq%%grfxdh%ltevposie%mbbzmk%e
+			%bdevq%%grfxdh%uqcqswo%mbbzmk%x
+			%bdevq%%grfxdh%zvipzis%mbbzmk%i
+			%bdevq%%grfxdh%kquqjy%mbbzmk%t
+			%bdevq%%grfxdh%kmgnxdhqb%mbbzmk% 
+	b. Deobfuscate the beginning with: https://github.com/DissectMalware/batch_deobfuscator
+		a.  ┌──(kali㉿kali)-[~/CTF/huntress2023/malware/batchfuscation]
+			└─$ python batch_deobfuscator/batch_interpreter.py --file ./batchfuscation > batch_deobfucscated
+
+4. Review the fist part of the file now deobfuscated
+	a.  set bdevq=set
+		set grfxdh=
+		setmbbzmk==
+		setxeegh=/
+		setjeuudks=a
+		setrbiky=c
+		setwzirk=m
+		setnaikpbo=d
+		setltevposie=e
+		setuqcqswo=x
+		setzvipzis=i
+		setkquqjy=t
+		setkmgnxdhqb=
+			i. ensure all lines have a " " between set and the variable (ex: set jeuudks=a)
+
+	b. We can also see some other lines which got decoded slightly incorrectly (see batch_deobfuscated)
+		i.  set/abpquuu=4941956 %% 4941859
+			cmd/cexit(4941956 %% 4941859)
+			[CHILD CMD]
+				exit(4941956 %% 4941859)
+			[END OF CHILD CMD]
+			a. Should be changed to:
+				i.  set /a bpquuu=4941956 %% 4941859
+					cmd /c exit(4941956 %% 4941859)
+						   exit(4941956 %% 4941859)
+
+5. From batch_deobfuscated take lines 15-433 and paste it into a new batch file named batch_deobfuscated_2
+	a. remove the following instances on all matching lines:
+		i. [CHILD CMD]
+		ii. [END OF CHILD CMD]
+	b. Find and replace the following instances on all matchine lines:
+		i. set/a -> set /a (note the trailing space after " /a ")
+		ii. cmd/c -> cmd /c (note the trailing space after " /c ")
+	c. Remove the leading white space before the "exit" lines
+		i. "	" (no quotes)
+	d. Remove every line similar to:
+		i. exit(4941956 %% 4941859)
+		ii. exit(9273642 %% 9273544)
+		iii. etc..
+	e. Save file as batch_deobfuscated_2
+
+6. Copy batch_deobfuscated_2 as batch_deobfuscated_2.bat
+	a.  ┌──(kali㉿kali)-[~/CTF/huntress2023/malware/batchfuscation]
+		└─$ cp batch_deobfuscated_2 batch_deobfuscated_2.bat
+
+7. Run batch_deobfuscated_2.bat on a Windows Sandbox (output truncated)
+	a.  C:\CTF\huntress2023\malware\batchfuscation>set /a bpquuu=4941956 % 4941859
+
+		C:\CTF\huntress2023\malware\batchfuscation>cmd /c exit 97
+
+		C:\CTF\huntress2023\malware\batchfuscation>set grtoy=a
+
+		C:\CTF\huntress2023\malware\batchfuscation>set /a fqumc=9273642 % 9273544
+
+		C:\CTF\huntress2023\malware\batchfuscation>cmd /c exit 98
+
+		C:\CTF\huntress2023\malware\batchfuscation>set kbhoesxh=b
+
+		C:\CTF\huntress2023\malware\batchfuscation>set /a uhtsvvtj=9196704 % 9196605
+
+		C:\CTF\huntress2023\malware\batchfuscation>cmd /c exit 99
+
+		C:\CTF\huntress2023\malware\batchfuscation>set fxflckau=c
+
+		C:\CTF\huntress2023\malware\batchfuscation>set /a anbayva=2699100 % 2699000
+
+		C:\CTF\huntress2023\malware\batchfuscation>cmd /c exit 100
+
+		C:\CTF\huntress2023\malware\batchfuscation>set pxesvvz=d
+
+	b. Outut starts to show an alphabet and number sequence.
+	c. Cleanup the output so that only the "set VAR=LETTER" lines remain (include the numbers, and symbols such as {} as well)
+		i. See batch_deobfuscated_3
+
+8. Making a copy of batchfuscation replace the encoded set lines with the decoded ones from batch_deobfuscated_3
+	a.  ┌──(kali㉿kali)-[~/CTF/huntress2023/malware/batchfuscation]
+        └─$ cp batchfuscation batch_deobfuscated_4  
+    b. See batch_deobfuscated_4
+
+9. Copy batch_deobfuscated_4 to batch_deobfuscated_5 and carefully start using find/replace with the variables
+	a.  ┌──(kali㉿kali)-[~/CTF/huntress2023/malware/batchfuscation]
+		└─$ cp batch_deobfuscated_4 batch_deobfuscated_5
+	b. See batch_deobfuscated_5 <-- fully decoded
+
+10. During decoding there were some flag lines printed, grep them all out
+	a. 	┌──(kali㉿kali)-[~/CTF/huntress2023/malware/batchfuscation]
+		└─$ grep -ri 'flag' batch_deobfuscated_5
+			rem set fpxkxvovkjkbqetregflagenwrrujhqlbucr=bwiannsetinyqipqyyerfppukhzqjpugogktrlqzybzijbhcsvhoiksgelgryr
+			:: set flag_character34=d
+			:: set flag_character20=3
+			:: set flag_character2=l
+			:: set flag_character1=f
+			:: set flag_character8=a
+			:: set flag_character10=6
+			:: set flag_character35=1
+			:: set flag_character37=a
+			:: set flag_character18=b
+			:: set flag_character32=b
+			:: set flag_character14=d
+			:: set flag_character16=b
+			:: set flag_character9=d
+			:: set flag_character6=a
+			:: set flag_character24=6
+			rem set szxeljrggrbrzfthkndltpckflagbwektknfqpq=jqffaffgqhnpmcgrpt
+			:: set flag_character28=3
+			:: set flag_character19=f
+			rem set uicsnkqce=pxnldohrnucqxxstfzvhmlnxnqlnmrzwmaflagxennbegujwbqt
+			:: set flag_character33=9
+			:: set flag_character13=3
+			:: set flag_character23=c
+			:: set flag_character30=0
+			:: set flag_character22=a
+			:: set flag_character25=6
+			:: set flag_character15=0
+			:: set flag_character38=}
+			:: set flag_character27=9
+			:: set flag_character4=g
+			:: set flag_character31=d
+			:: set flag_character21=1
+			:: set flag_character36=9
+			:: set flag_character12=e
+			:: set flag_character5={
+			:: set flag_character7=c
+			:: set flag_character17=5
+			:: set flag_character26=3
+			:: set flag_character11=7
+			:: set flag_character3=a
+			:: set flag_character29=6
+
+11. Cleanup the output with a more refined grep string
+	a.  ┌──(kali㉿kali)-[~/CTF/huntress2023/malware/batchfuscation]
+		└─$ grep -ri 'flag_' batch_deobfuscated_5 | sort 
+		:: set flag_character10=6
+		:: set flag_character11=7
+		:: set flag_character12=e
+		:: set flag_character13=3
+		:: set flag_character14=d
+		:: set flag_character15=0
+		:: set flag_character16=b
+		:: set flag_character17=5
+		:: set flag_character18=b
+		:: set flag_character19=f
+		:: set flag_character1=f
+		:: set flag_character20=3
+		:: set flag_character21=1
+		:: set flag_character22=a
+		:: set flag_character23=c
+		:: set flag_character24=6
+		:: set flag_character25=6
+		:: set flag_character26=3
+		:: set flag_character27=9
+		:: set flag_character28=3
+		:: set flag_character29=6
+		:: set flag_character2=l
+		:: set flag_character30=0
+		:: set flag_character31=d
+		:: set flag_character32=b
+		:: set flag_character33=9
+		:: set flag_character34=d
+		:: set flag_character35=1
+		:: set flag_character36=9
+		:: set flag_character37=a
+		:: set flag_character38=}
+		:: set flag_character3=a
+		:: set flag_character4=g
+		:: set flag_character5={
+		:: set flag_character6=a
+		:: set flag_character7=c
+		:: set flag_character8=a
+		:: set flag_character9=d
+
+12. Assemble flag: flag{acad67e3d0b5bf31ac6639360db9d19a}
+

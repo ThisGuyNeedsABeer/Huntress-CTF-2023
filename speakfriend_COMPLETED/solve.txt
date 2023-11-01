@@ -1,0 +1,82 @@
+Challenge: Speakfriend
+Category: Malware
+Difficulty: medium
+Author: @HuskyHacks
+
+Description: It seems like this website was compromised. We found this file that seems to be related... can you make any sense of these and uncover a flag?
+
+NOTE:
+Archive password is infected
+You will need access this service with HTTPS. Please use https:// as the URL schema rather than plain http://.
+This website uses a self-signed certificate. The "Warning: connection not secure" message is expected and intended. You can continue on to the website.
+This challenge is based off of a real malware sample. We have done our best to "defang" the code, but out of abundance of caution it is strongly encouraged you only analyze this inside of a virtual environment separate from any production devices.
+
+
+Press the Start button on the top-right to begin this challenge.
+Connect with:
+
+http://chal.ctf.games:30270
+
+Attachments: main.7z
+
+
+Solution:
+
+1. Download and extract the file
+2. Strings shows us a user-agent that doesn't look quite standard and there are a lot of references to curl
+
+Mozilla/H
+5.0 93beH
+d45b-7b7H
+0-4097-9H
+279-98a4H
+aef0353eH
+
+_curl_easy_setopt_err_long
+_curl_easy_setopt_err_curl_off_t
+_curl_easy_setopt_err_string
+_curl_easy_setopt_err_write_callback
+_curl_easy_setopt_err_resolver_start_callback
+_curl_easy_setopt_err_read_cb
+_curl_easy_setopt_err_ioctl_cb
+_curl_easy_setopt_err_sockopt_cb
+_curl_easy_setopt_err_opensocket_cb
+_curl_easy_setopt_err_progress_cb
+_curl_easy_setopt_err_debug_cb
+_curl_easy_setopt_err_ssl_ctx_cb
+_curl_easy_setopt_err_conv_cb
+_curl_easy_setopt_err_seek_cb
+_curl_easy_setopt_err_cb_data
+_curl_easy_setopt_err_error_buffer
+_curl_easy_setopt_err_FILE
+_curl_easy_setopt_err_postfields
+_curl_easy_setopt_err_curl_httpost
+_curl_easy_setopt_err_curl_mimepost
+_curl_easy_setopt_err_curl_slist
+_curl_easy_setopt_err_CURLSH
+_curl_easy_getinfo_err_string
+_curl_easy_getinfo_err_long
+_curl_easy_getinfo_err_double
+_curl_easy_getinfo_err_curl_slist
+_curl_easy_getinfo_err_curl_tlssesssioninfo
+_curl_easy_getinfo_err_curl_certinfo
+_curl_easy_getinfo_err_curl_socket
+_curl_easy_getinfo_err_curl_off_t
+
+3. Curling the challenge URL we get: 
+
+┌──(kali㉿kali)-[~/CTF/huntress2023/malware/speakfriend_COMPLETED]
+└─$ curl https://chal.ctf.games:30270/ -H 'User-Agent: Mozilla/5.0 93bed45b-7b70-4097-9279-98a4aef0353e' --insecure             
+<!doctype html>
+<html lang=en>
+<title>Redirecting...</title>
+<h1>Redirecting...</h1>
+<p>You should be redirected automatically to the target URL: <a href="/93bed45b-7b70-4097-9279-98a4aef0353e/c2">/93bed45b-7b70-4097-9279-98a4aef0353e/c2</a>. If not, click the link.
+
+4. If we follow the redirect we are greated with the flag and the user-agent acting as a key
+
+┌──(kali㉿kali)-[~/CTF/huntress2023/malware/speakfriend_COMPLETED]
+└─$ curl -sL https://chal.ctf.games:30270/ -H 'User-Agent: Mozilla/5.0 93bed45b-7b70-4097-9279-98a4aef0353e' --insecure
+flag{3f2567475c6def39501bab2865aeba60}
+
+5. Flag: flag{3f2567475c6def39501bab2865aeba60}

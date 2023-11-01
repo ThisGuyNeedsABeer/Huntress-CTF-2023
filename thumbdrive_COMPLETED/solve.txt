@@ -1,0 +1,168 @@
+Challenge: Thumb Drive
+Category: Malware
+Difficulty: medium
+Author: @JohnHammond
+Description: People say you shouldn't plug in USB drives! But I discovered this neat file on one that I found in the parking lot...
+
+WARNING: Your antivirus solution may raise an alert (this is the 'Malware' category, after all). Please do not attempt this challenge without the usual caution you may take when analyzing malicious software.
+
+Download the file(s) below.
+Attachments: ADATA_128GB.lnk
+
+Solution:
+
+1. Confirm the file extension is accurate
+
+┌──(kali㉿kali)-[~/CTF/huntress2023/malware/thumbdrive]
+└─$ file ADATA_128GB.lnk         
+ADATA_128GB.lnk: MS Windows shortcut, Item id list present, Points to a file or directory, Has Description string, Has command line arguments, Icon number=30, Archive, ctime=Sun Nov 21 08:24:03 2010, mtime=Sun Nov 21 08:24:03 2010, atime=Sun Nov 21 08:24:03 2010, length=302592, window=hidenormalshowminimized
+
+2. Analyze LNK file with lnkinfo (output truncated)
+
+┌──(kali㉿kali)-[~/CTF/huntress2023/malware/thumbdrive]
+└─$ lnkinfo ADATA_128GB.lnk 
+
+(...)
+
+                /V/R    CMD<https://
+        Icon location                   : inyurl.com/a7ba6ma
+
+Link target identifier:
+        Shell item list
+                Number of items         : 5
+
+        Shell item: 1
+                Item type               : Root folder
+                Class type indicator    : 0x1f (Root folder)
+                Shell folder identifier : 20d04fe0-3aea-1069-a2d8-08002b30309d
+                Shell folder name       : My Computer
+
+(...)
+
+3. Review the url "inyurl.com/a7ba7ma" -> likely "tinyurl.com"
+4. Curl website
+
+┌──(kali㉿kali)-[~/CTF/huntress2023/malware/thumbdrive]
+└─$ curl tinyurl.com/a7ba6ma                                                   
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="refresh" content="0;url='https://drive.google.com/file/d/1RUNqvPq6cWSs0rkqiHApEEAsCzaObT2B/view?usp=sharing'" />
+
+        <title>Redirecting to https://drive.google.com/file/d/1RUNqvPq6cWSs0rkqiHApEEAsCzaObT2B/view?usp=sharing</title>
+    </head>
+    <body>
+        Redirecting to <a href="https://drive.google.com/file/d/1RUNqvPq6cWSs0rkqiHApEEAsCzaObT2B/view?usp=sharing">https://drive.google.com/file/d/1RUNqvPq6cWSs0rkqiHApEEAsCzaObT2B/view?usp=sharing</a>.
+    </body>
+</html>
+
+5. Download Google Drive content, save as usb.txt
+6. Analyze contents of usb.txt
+	a. Does not decode from Base64
+	b. https://dcode.fr/cipher-identifier returns Base32 encoding
+7. Decode from Base32 on CyberChef
+	a. Recipie "From Bas32"
+	b. Paste contents of usb.txt
+	c. Identify the file as an executable based on returned code
+	d. Save to file > usb.exe
+8. Analyze usb.exe
+
+	a. Confirm file extension
+	┌──(kali㉿kali)-[~/CTF/huntress2023/malware/thumbdrive]
+	└─$ file usb.exe        
+	usb.exe: PE32 executable (DLL) (GUI) Intel 80386, for MS Windows, 5 sections
+
+	b. Additional file property confirmation
+	┌──(kali㉿kali)-[~/CTF/huntress2023/malware/thumbdrive]
+	└─$ binwalk -e usb.exe                  
+
+	DECIMAL       HEXADECIMAL     DESCRIPTION
+	--------------------------------------------------------------------------------
+	0             0x0             Microsoft executable, portable (PE)
+	8800          0x2260          XML document, version: "1.0"
+
+	c. Search for strings
+	┌──(kali㉿kali)-[~/CTF/huntress2023/malware/thumbdrive]
+	└─$ strings usb.exe | grep flag
+	Your flag is:
+
+	d. Determine what Program has the cabability to do
+	┌──(kali㉿kali)-[~/CTF/huntress2023/malware/thumbdrive]
+	└─$ capa usb.exe
+	┍━━━━━━━━━━━━━━━━━━━━━━━━┯━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┑                                                     
+	│ md5                    │ f177ed1822bbdda18fcd143b6fd60b0f                                                   │
+	│ sha1                   │ 42d234cc44c71d18c80e7b66370c1256d313c6fb                                           │
+	│ sha256                 │ 6334b111f4d93ebb11b9481f71a4a0122021bd0772f9cef0b11b8ed37dbfde2d                   │
+	│ os                     │ windows                                                                            │
+	│ format                 │ pe                                                                                 │
+	│ arch                   │ i386                                                                               │
+	│ path                   │ /home/kali/CTF/huntress2023/malware/thumbdrive/usb.exe                             │
+	┕━━━━━━━━━━━━━━━━━━━━━━━━┷━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┙
+
+	┍━━━━━━━━━━━━━━━━━━━━━━━━┯━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┑
+	│ ATT&CK Tactic          │ ATT&CK Technique                                                                   │
+	┝━━━━━━━━━━━━━━━━━━━━━━━━┿━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┥
+	│ DEFENSE EVASION        │ Obfuscated Files or Information T1027                                              │
+	┕━━━━━━━━━━━━━━━━━━━━━━━━┷━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┙
+
+	┍━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┯━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┑
+	│ MBC Objective               │ MBC Behavior                                                                  │
+	┝━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┿━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┥
+	│ DATA                        │ Encode Data::XOR [C0026.002]                                                  │
+	├─────────────────────────────┼───────────────────────────────────────────────────────────────────────────────┤
+	│ DEFENSE EVASION             │ Obfuscated Files or Information::Encoding-Standard Algorithm [E1027.m02]      │
+	├─────────────────────────────┼───────────────────────────────────────────────────────────────────────────────┤
+	│ PROCESS                     │ Create Thread [C0038]                                                         │
+	┕━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┷━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┙
+
+	┍━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┯━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┑
+	│ Capability                                           │ Namespace                                            │
+	┝━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┿━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┥
+	│ encode data using XOR                                │ data-manipulation/encoding/xor                       │
+	│ contains PDB path                                    │ executable/pe/pdb                                    │
+	│ create thread                                        │ host-interaction/thread/create                       │
+    ┕━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┷━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┙
+
+    e. There is some data manipulation and encoding going on, let's keep digging for dlls/references/etc.
+
+    ┌──(kali㉿kali)-[~/CTF/huntress2023/malware/thumbdrive]
+	└─$ malutil-superstrings -a -u -i usb.exe
+	0x1b0c (ascii) filename hello-world.dll
+	0x1c20 (ascii) filename KERNEL32.dll
+	0x1c3c (ascii) filename USER32.dll
+	0x1c8c (ascii) filename VCRUNTIME140.dll
+	0x1d44 (ascii) filename api-ms-win-crt-runtime-l1-1-0.dll
+
+	f. Two different routes of additional analysis can be taken. 
+		a. Speakeasy (PE Emulation)
+
+		┌──(kali㉿kali)-[~/CTF/huntress2023/malware/thumbdrive]
+		└─$ speakeasy -t usb.exe       
+		* exec: dll_entry.DLL_PROCESS_ATTACH
+		0x10001662: 'KERNEL32.GetSystemTimeAsFileTime(0x1211fc8)' -> None
+		0x10001671: 'KERNEL32.GetCurrentThreadId()' -> 0x434
+		0x1000167a: 'KERNEL32.GetCurrentProcessId()' -> 0x420
+		0x10001687: 'KERNEL32.QueryPerformanceCounter(0x1211fc0)' -> 0x1
+		0x10001c13: 'KERNEL32.IsProcessorFeaturePresent("PF_XMMI64_INSTRUCTIONS_AVAILABLE")' -> 0x1
+		0x100018cf: 'api-ms-win-crt-runtime-l1-1-0._initialize_onexit_table(0x10003364)' -> 0x0
+		0x100018de: 'api-ms-win-crt-runtime-l1-1-0._initialize_onexit_table(0x10003370)' -> 0x0
+		0x100016ed: 'KERNEL32.InitializeSListHead(0x10003340)' -> None
+		0x10001283: 'api-ms-win-crt-runtime-l1-1-0._initterm_e(0x10002080, 0x10002084)' -> 0x0
+		0x10001c13: 'KERNEL32.IsProcessorFeaturePresent("PF_XMMI64_INSTRUCTIONS_AVAILABLE")' -> 0x1
+		0x100012a1: 'api-ms-win-crt-runtime-l1-1-0._initterm(0x10002078, 0x1000207c)' -> 0x0
+		0x100011ae: 'KERNEL32.CreateThread(0x0, 0x0, 0x10001000, 0x0, 0x0, 0x0)' -> 0x220
+		* exec: export._DllMain@12
+		* exec: export._MessageBoxThread@4
+		0x10001171: 'USER32.MessageBoxA(0x0, "flag{0af2873a74cfa957ccb90cef814cfe3d}", "Your flag is:", 0x0)' -> 0x2
+		* exec: thread
+		0x10001171: 'USER32.MessageBoxA(0x0, "flag{0af2873a74cfa957ccb90cef814cfe3d}íþ*c£ä", "Your flag is:", 0x0)' -> 0x2
+		* Finished emulating
+
+			i. Flag: flag{0af2873a74cfa957ccb90cef814cfe3d} 
+
+		b. Online Sandbox (Hybrid-Analyis, Tria.ge, JoeSandbox, etc.)
+			i. Program will execute and display the flag value in a messagebox
+			ii. Flag: flag{0af2873a74cfa957ccb90cef814cfe3d}
+
+

@@ -1,0 +1,35 @@
+Challenge: HumanTwo
+Category: Malware
+Difficulty: easy
+Author: @JohnHammond
+Description:
+
+During the MOVEit Transfer exploitation, there were tons of "indicators of compromise" hashes available for the human2.aspx webshell! We collected a lot of them, but they all look very similar... except for very minor differences. Can you find an oddity?
+
+NOTE, this challenge is based off of a real malware sample. We have done our best to "defang" the code, but out of abudance of caution it is strongly encouraged you only analyze this inside of a virtual environment separate from any production devices.
+
+Solution:
+1. Read article: https://www.huntress.com/blog/moveit-transfer-critical-vulnerability-rapid-response
+2. Difference information:
+
+Enforces a static password for access, determined by the X-siLock-Comment HTTP header. If this password is not supplied, the server returns a 404 with no further function. This password seems to vary, and for this reason, you will see multiple hashes being shared as IOCs for human2.aspx.
+
+3. Recursively print out passwords in line 36
+
+grep -R "pass" .
+
+4. Find the one that doesn't look the same in this file:
+
+./cc53495bb42e4f6563b68cdbdd5e4c2a9119b498b488f53c0f281d751a368f19:    
+
+Line 34: if (!String.Equals(pass, "666c6167-7b36-6365-3666-366131356464"+"64623065-6262-3333-3262-666166326230"+"62383564-317d-0000-0000-000000000000")) {
+
+5. Brute identification of string: https://www.boxentriq.com/code-breaking/cipher-identifier 
+
+Likely Hexidecimal
+
+6. Convert with xxd 
+
+echo "666c6167-7b36-6365-3666-366131356464"+"64623065-6262-3333-3262-666166326230"+"62383564-317d-0000-0000-000000000000" | xxd -r -p
+
+7. Flag: flag{6ce6f6a15dddb0ebb332bfaf2b0b85d1}

