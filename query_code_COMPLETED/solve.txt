@@ -1,0 +1,13 @@
+Challenge: Query Code
+Category: Warmups
+Difficulty: easy
+Author: @JohnHammond
+Description: What's this?
+
+Solution: 
+1. file query_code, find out it's a png file
+2. rename to query_code.png
+3. install zbarimg
+4. process with zbarimg or use https://zxing.org/w/decode.jspx
+5. zbarimg query_code.png | grep -o 'flag{[^}]*}' | sed 's/| //'
+6. Flag: flag{3434cf5dc6a865657ea1ec1cb675ce3b}

@@ -1,0 +1,10 @@
+Challenge: F12
+Category: Warmups
+Difficulty: easy
+Author: @JohnHammond
+Description: Remember when Missouri got into hacking!?! You gotta be fast to catch this flag!
+
+1. Launch the VM and connect to the URL: http://chal.ctf.games:32522/
+2. A window flashes open and closed
+3. Find the URL that flashed open and closed: http://chal.ctf.games:32522/capture_the_flag.html
+4. View source and find flag on line 11314: flag{03e8ba07d1584c17e69ac95c341a2569}

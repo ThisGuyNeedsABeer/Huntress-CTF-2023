@@ -1,0 +1,8 @@
+Challenge: Notepad
+Category: Warmups
+Difficulty: easy
+Author: @JohnHammond
+Description: Just a sanity check... you do know how to use a computer, right?
+
+1. strings notepad | grep -o 'flag{[^}]*}' | sed 's/| //'
+2. Flag: flag{2dd41e3da37ef1238954d8e7f3217cd8}

@@ -1,0 +1,19 @@
+Challenge: Comprezz
+Category: Warmups
+Difficulty: easy
+Author: @JohnHammond
+Description: Someone stole my S's and replaced them with Z's! Have you ever seen this kind of file before?
+
+Download the file(s) below.
+Attachments: Comprezz
+
+1. Determine filetype
+	a. file comprezz
+	b. comprezz: compress'd data 16 bits
+2. Uncompress comprezz
+	a. mv comprezz comprezz.z
+	b. uncompress comprezz.z
+3. Retreive flag from new "comprezz" file with strings
+	a. strings comprezz
+	b. flag{196a71490b7b55c42bf443274f9ff42b}
+

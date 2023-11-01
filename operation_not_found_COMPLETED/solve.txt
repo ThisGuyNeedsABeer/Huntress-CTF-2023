@@ -1,0 +1,32 @@
+Challenge: Operation Not Found
+Category: OSINT
+Difficulty: medium
+Author: @proslasher
+
+Description: In the boundless web of data, some corners echo louder than others, whispering tales of innovation, deep knowledge, and fierce competition. On the lush landscapes of https://osint.golf/, a corner awaits your discovery... where intellect converges with spirit, and where digital foundations stand alongside storied arenas.
+
+
+
+This is the chall1 challenge for the "HuntressCTF2023" challenges on https://osint.golf. It's a lot like Geoguesser if you have ever played :)
+
+Navigate to OSINT Golf and select the chall1 challenge.
+You will see an interface similar to Google Street View, where you can look around and zoom in on your surroundings. Try and determine your location on the map of the earth!
+Move your mouse over the minimap in the bottom-right corner, and scroll to zoom or click and hold to pan around the map.
+Click and place your pin-marker on the map where you believe your exact location is. The accuracy radius is 200 meters.
+Click Submit. If you are incorrect, it will say "not here" on the top left. If you are correct, your flag will be displayed in the top-left corner.
+Copy and paste the flag value into the input box below and submit it to solve this challenge!
+
+
+Connect here: https://osint.golf/HuntressCTF2023-chall1/
+
+Solution:
+
+1. Take a picture of the large building (building.png)
+2. Upload to Google Reverse Image Search
+3. First result is "Crosland Tower" at Georigia Tech
+4. Address: 249-371 Bobby Dodd Way NW
+
+https://www.google.com/maps/place/249-371+Bobby+Dodd+Way+NW,+Atlanta,+GA+30332/@33.7559996,-84.4108479,12z/data=!4m6!3m5!1s0x88f504626aca2375:0xa2870269814d06d5!8m2!3d33.7740921!4d-84.3950282!16s%2Fg%2F11nnkyh7gz?entry=ttu
+
+5. Enter pinpoint on Crosland Tower in Minimap on Challenge
+6. Flag: flag{c46b7183c9810ec4ddb31b2fdc6a914c}

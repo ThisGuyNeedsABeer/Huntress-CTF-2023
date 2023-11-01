@@ -1,0 +1,11 @@
+Challenge: Book By Its Cover
+Category: Warmups
+Difficulty: easy
+Author: @JohnHammond
+Description: They say you aren't supposed to judge a book by its cover, but this is one of my favorites!
+
+Solution: 
+
+1. discover book.rar is a .png (file book.rar)
+2. rename to book.png and open to view the flag
+3. Flag: flag{f8d32a346745a6c4bf4e9504ba5038f0}

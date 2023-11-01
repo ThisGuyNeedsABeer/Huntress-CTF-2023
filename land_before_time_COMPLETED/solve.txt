@@ -1,0 +1,33 @@
+Challenge: Land Before Time
+Category: Steganography
+Difficulty: easy
+Author: @proslasher
+Description: This trick is nothing new, you know what to do: iSteg. Look for the tail that's older than time, this Spike, you shouldn't climb.
+
+Download the file(s) below.
+Attachments: dinosaurs1.png
+
+Solution:
+
+1. Download iSteg from GitHub: https://github.com/rafiibrahim8/iSteg
+2. Feed it /home/kali/CTF/huntress2023/steganography/land_before_time/dinosaurs1.png
+3. Retreive Flag: flag{da1e2bf9951c9eb1c33b1d2008064fee}
+
+Note: Password (not needed) is "john hammond is cool" discovered on: https://www.aperisolve.com/
+
+┌──(kali㉿kali)-[~/CTF/tools/steganography/iSteg]
+└─$ java -jar iSteg-v2.01_CLI.jar
+iSteg CLI v-2.01
+Enter your choice:
+        1. Hide a file with Steg
+        2. Hide a message with Steg
+        3. Extract stuff from Steg
+        Enter any things to exit.
+3
+Enter file name with extension: 
+/home/kali/CTF/huntress2023/steganography/land_before_time/dinosaurs1.png
+Password (Press enter if the steganographic data wasn't encrypted):
+
+Message extraction successful. The text is:
+
+Flag: flag{da1e2bf9951c9eb1c33b1d2008064fee}

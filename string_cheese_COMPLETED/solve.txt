@@ -1,0 +1,11 @@
+Challenge: String Cheese
+Category: Warmups
+Difficulty: easy
+Author: @JohnHammond
+
+Description: Oh, a cheese stick! This was my favorite snack as a kid. My mom always called it by a different name though...
+
+Solution:
+
+1. strings cheese.jpg | grep -o 'flag{[^}]*}' | sed 's/| //'
+2. Flag: flag{f4d9f0f70bf353f2ca23d81dcf7c9099}

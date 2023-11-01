@@ -1,0 +1,17 @@
+Challenge: Opposable Thumbs
+Category: Warmups
+Difficulty: easy
+Author: @JohnHammond
+Description: We uncovered a database. Perhaps the flag is right between your fingertips!
+
+NOTE: this flag does NOT follow the standard MD5 hash format, but does have the usual flag{} prefix and suffix.
+
+Download the file(s) below.
+Attachments: thumbcache_256.db
+
+Solution:
+
+1. Download ThumbCache Viewer: https://thumbcacheviewer.github.io/
+2. Feed it: thumbcache_256.db
+3. Scroll through files watching the preview until you find "3fa8aafdd63e1168.jpg" 
+4. Find flag: flag{human_after_all}

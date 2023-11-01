@@ -1,0 +1,12 @@
+Challenge: Chicken Wings
+Category: Warmups
+Difficulty: easy
+Author: @JohnHammond
+Description: I ordered chicken wings at the local restaurant, but uh... this really isn't what I was expecting...
+
+Download the file(s) below.
+Attachments: chicken_wings
+
+1. Open the text on Windows in Notepad++
+2. Paste into: https://lingojam.com/WingdingsTranslator
+3. Get Flag: flag{e0791ce68f718188c0378b1c0a3bdc9e}

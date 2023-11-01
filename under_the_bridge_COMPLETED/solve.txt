@@ -1,0 +1,30 @@
+Challenge: Under The Bridge
+Category: OSINT
+Difficulty: medium
+Author: @proslasher
+
+Description: Can you find this iconic location?
+
+This is the chall2 challenge for the "HuntressCTF2023" challenges on https://osint.golf. It's a lot like Geoguesser if you have ever played :)
+
+Navigate to OSINT Golf and select the chall2 challenge.
+You will see an interface similar to Google Street View, where you can look around and zoom in on your surroundings. Try and determine your location on the map of the earth!
+Move your mouse over the minimap in the bottom-right corner, and scroll to zoom or click and hold to pan around the map.
+Click and place your pin-marker on the map where you believe your exact location is. The accuracy radius is 200 meters.
+Click Submit. If you are incorrect, it will say "not here" on the top left. If you are correct, your flag will be displayed in the top-left corner.
+Copy and paste the flag value into the input box below and submit it to solve this challenge!
+
+
+Connect here: https://osint.golf/HuntressCTF2023-chall2/
+
+
+Solution: 
+
+	1. Look around and take a screenshot of the bridge (bridge.png)
+	2. Google calls this "Rickroll Tunnel"
+	3. Search for address: 150 Freston Road in London
+
+	https://www.google.com/maps/place/150+Freston+Rd,+London+W10+6TR,+UK/@51.5125812,-0.2190478,19z/data=!4m6!3m5!1s0x48760fd8dc26c3ab:0xbe6d24863b07ed3f!8m2!3d51.5125253!4d-0.2186964!16s%2Fg%2F11c43xbp1d?entry=ttu
+
+	4. Find on minimap
+	5. Flag: flag{fdc8cd4cff2c19e0d1022e78481ddf36}

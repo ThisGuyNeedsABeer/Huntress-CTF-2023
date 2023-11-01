@@ -1,0 +1,15 @@
+Challenge: Where am I?
+Category: OSINT
+Difficulty: medium
+Author: @proslasher
+Description: Your friend thought using a JPG was a great way to remember how to login to their private server. Can you find the flag?
+
+Download the file(s) below.
+Attachments: PXL_20230922_231845140_2.jpg
+
+1. Renamed PXL_20230922_231845140_2.jpg to image.jpg
+2. Look for base64
+	a. exiftool image.jpg | grep =
+3. Convert base64 found in "Image Description"
+	a. echo "echo "ZmxhZ3tiMTFhM2YwZWY0YmMxNzBiYTk0MDljMDc3MzU1YmJhMik=" | base64 -d"
+4. Get Flag: flag{b11a3f0ef4bc170ba9409c077355bba2)
