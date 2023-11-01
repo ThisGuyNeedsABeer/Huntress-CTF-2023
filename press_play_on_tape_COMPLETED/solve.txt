@@ -1,0 +1,39 @@
+Challenge: PRESS PLAY ON TAPE
+Category: Miscellaneous
+Difficulty: easy
+Author: @daveAThuntress
+Description: While walking home through a dark alley you find an archaic 1980s cassette tape. It has "PRESS PLAY ON TAPE" written on the label. You take it home and play it on your old tape deck. It sounds awful. The noise made you throw your headphones to the floor immedately. You snagged a recording of it for analysis.
+
+WARNING: The audio in this file is very loud and obnoxious. Please turn your volume way down before playing.
+
+Download the file(s) below.
+Attachments: pressplayontape.wav
+
+Solution:
+
+1. Identify file type with "file pressplayontape.wav"
+	a. pressplayontape.wav: RIFF (little-endian) data, WAVE audio, Microsoft PCM, 8 bit, mono 44100 Hz
+2. Challenge is "Press Play on Tape" - commodore64?
+3. Downloaded WAV-PRG & Audiotap from: https://wav-prg.sourceforge.io/wavprg.html
+4. On Windows, extracted both archives to the same folder
+5. Loaded pressplayontape.wav into wavprg.exe
+	a. Convert a sound or a TAP or WAV file to PRG, POO or T64
+	b. User Loader: Default C64
+	c. Plug-in directory: .\c64\loaders
+	d. Origin: File
+	e. Inverted wavform: unchecked
+	f. Sensitivity (0-100): 12
+	g. Use Clock: C64 PAL
+	h. Input frequency (Hz) (only if origin is sound card): 44100 *cannot change
+	i. Destination: PRG
+	j. Include broken and incomplete files: unchecked
+	k. Include all slow-loading blocks: unchecked
+	l. Folder for PRG/POO: <desired-output-path>
+	m. Click "OK"
+6. Analyze default.prg in the output folder
+	a. Strings default.prg
+
+	 "FLAG[32564872D760263D52929CE58CC40071]" 9
+ 	 10
+7. Cleanup flag output
+	a. flag{32564872d760263d52929ce58cc40071}

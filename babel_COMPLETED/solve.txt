@@ -1,0 +1,31 @@
+Challenge: Babel
+Category: Miscellaneous
+Difficulty: medium
+Author: @JohnHammond
+
+It's babel! Just a bunch of gibberish, right?
+
+Download the file below.
+Attachments: babel
+
+Solution 1:
+
+1. Re-write the code in Python (see flag.py)
+2. Output Python to a file
+	a. python flag.py > output
+3. Search text for flag
+4. Flag: flag{b6cfb6656ea0ac92849a06ead582456c}
+
+Solution 2: 
+
+1. Paste the value of "string pTIxJTjYJE" into CyberChef
+2. Recipie:
+	a. Substitute:
+		i. Plaintext: lQwSYRxgfBHqNucMsVonkpaTiteDhbXzLPyEWImKAdjZFCOvJGrU
+		ii. Ciphertext: abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ
+	b. From Base64
+		i. Default Values
+	c. Strings
+		i. Default Values
+3. Search for "flag"
+4. Flag: flag{b6cfb6656ea0ac92849a06ead582456c}

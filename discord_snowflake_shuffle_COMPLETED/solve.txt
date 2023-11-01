@@ -1,0 +1,31 @@
+Challenge: Discord Snowflake Scramble
+Category: Miscellaneous
+Category: easy
+Author: @Kaspertame
+
+Description: Someone sent message on a Discord server which contains a flag! They did mention something about being able to embed a list of online users on their own website...
+
+Can you figure out how to join that Discord server and see the message?
+
+Note: Discord phone verification is NOT required for this challenge.
+
+Connect here: https://discord.com/channels/1156647699362361364/1156648139516817519/1156648284237074552
+
+Solution: 
+
+1. The numeric slugs of a Discord URL are called snowflakes.
+2. Google for a Discord Snowflake Decoder and find: https://discordtools.io/snowflake
+	a. Enter the first Snowflake and receive the following information:
+		i.  Snowflake: 1156647699362361364
+			Info: Eastern Daylight Time: 9/27/2023, 1:45:01 PM
+			UNIX: 1695836701.003
+
+			Discord Info:
+			Type: Server
+			Name: BABYSHARK
+			Members: 35
+			Invite: https://discord.com/invite/QAGtk32x
+3. Join Server at: https://discord.com/invite/QAGtk32x
+	a. Enter channel #flag
+	b. Flag is posted in the chat
+4. Flag: flag{bb1dcf163212c54317daa7d1d5d0ce35}

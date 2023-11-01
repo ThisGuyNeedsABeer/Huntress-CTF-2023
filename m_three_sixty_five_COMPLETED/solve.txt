@@ -1,0 +1,93 @@
+Multi-Challenge: M Three Sixty Five
+Category: Miscellaneous
+Difficulty: easy
+Author: David Carter
+Description: 
+
+1. For this challenge, you can connect into a PowerShell Core instance. Note that this is running out of a Linux-based Docker container, so you do not have a full-blown Windows operating system or pure PowerShell.
+
+Connect with SSH, with username user and SSH password userpass.
+
+When you connect to the session for the very first time, you will be authenticated into a Microsoft 365 environment. WARNING: Once you disconnect, you will need to restart your container to reauthenticate
+
+For all of the M365-related challenges, you can use this same container for all the associated tasks in this group. If your container does not seem to be able to authenticate, please wait some time -- perhaps Microsoft might not like multiple logins at the same time ;)
+
+Welcome to our hackable M365 tenant! Can you find any juicy details, like perhaps the street address this organization is associated with?
+
+Connect to this environment with the M Three Sixty Five - Start Here challenge card.
+
+Solve 1: 
+Get-AADIntTenantDetails | select street
+PS /home/user> Get-AADIntTenantDetails | select street
+
+street
+------
+flag{dd7bf230fde8d4836917806aff6a6b27}
+
+2. For this challenge, you can connect into a PowerShell Core instance. Note that this is running out of a Linux-based Docker container, so you do not have a full-blown Windows operating system or pure PowerShell.
+
+When you connect to the session for the very first time, you will be authenticated into a Microsoft 365 environment. WARNING: Once you disconnect, you will need to restart your container to reauthenticate
+
+For all of the M365-related challenges, you can use this same container for all the associated tasks in this group. If your container does not seem to be able to authenticate, please wait some time -- perhaps Microsoft might not like multiple logins at the same time ;)
+
+This tenant looks to have some odd Conditional Access Policies. Can you find a weird one?
+
+Connect to this environment with the M Three Sixty Five - Start Here challenge card.
+
+Solve 2:
+Get-AADIntConditionalAccessPolicies | select displayName
+PS /home/user> Get-AADIntConditionalAccessPolicies | select displayName
+
+displayName
+-----------
+flag{d02fd5f79caa273ea535a526562fd5f7}
+Default Policy
+
+3. For this challenge, you can connect into a PowerShell Core instance. Note that this is running out of a Linux-based Docker container, so you do not have a full-blown Windows operating system or pure PowerShell.
+
+When you connect to the session for the very first time, you will be authenticated into a Microsoft 365 environment. WARNING: Once you disconnect, you will need to restart your container to reauthenticate
+
+For all of the M365-related challenges, you can use this same container for all the associated tasks in this group. If your container does not seem to be able to authenticate, please wait some time -- perhaps Microsoft might not like multiple logins at the same time ;)
+
+We observed saw some sensitive information being shared over a Microsoft Teams message! Can you track it down?
+
+Connect to this environment with the M Three Sixty Five - Start Here challenge card.
+
+Solve 3:
+Get-AADIntTeamsMessages | Format-Table id,content,deletiontime,*type*,DisplayName
+PS /home/user> Get-AADIntTeamsMessages | Format-Table id,content,deletiontime,*type*,DisplayName
+
+Id            Content                                DeletionTime MessageType Type    DisplayName
+--            -------                                ------------ ----------- ----    -----------
+1695838171758 flag{f17cf5c1e2e94ddb62b98af0fbbd46e1}              Text        Message FNU LNU
+1695838171758 flag{f17cf5c1e2e94ddb62b98af0fbbd46e1}              Text        Message FNU LNU
+
+4. For this challenge, you can connect into a PowerShell Core instance. Note that this is running out of a Linux-based Docker container, so you do not have a full-blown Windows operating system or pure PowerShell.
+
+When you connect to the session for the very first time, you will be authenticated into a Microsoft 365 environment. WARNING: Once you disconnect, you will need to restart your container to reauthenticate
+
+For all of the M365-related challenges, you can use this same container for all the associated tasks in this group. If your container does not seem to be able to authenticate, please wait some time -- perhaps Microsoft might not like multiple logins at the same time ;)
+
+One of the users in this environment seems to have unintentionally left some information in their account details. Can you track down The President?
+
+Connect to this environment with the M Three Sixty Five - Start Here challenge card.
+
+Solve 4:
+Search-AADIntTeamsUser -SearchString "president"
+PS /home/user> Search-AADIntTeamsUser -SearchString "president"
+
+Id                        : d15033b7-6556-4bcd-8ec5-0c3f7ff7e9be@05985beb-42bc-4c24-bf49-c1730a825406
+DisplayName               : Patti Fernandez
+EmailAddresses            : {PattiF@4rhdc6.onmicrosoft.com}
+Phones                    : {@{Number=flag{1e674f0dd1434f2bb3fe5d645b0f9cc3}; Type=Business}}
+JobTitle                  : President
+ImAddress                 : sip:pattif@4rhdc6.onmicrosoft.com
+PeopleType                : Person
+PeopleSubtype             : OrganizationUser
+MRI                       : 8:orgid:d15033b7-6556-4bcd-8ec5-0c3f7ff7e9be
+UserPrincipalName         : PattiF@4rhdc6.onmicrosoft.com
+ExternalDirectoryObjectId : d15033b7-6556-4bcd-8ec5-0c3f7ff7e9be
+Text                      : Patti Fernandez
+QueryText                 : PattiF@4rhdc6.onmicrosoft.com
+PropertyHits              : {JobTitle}
+ReferenceId               : f5651f7c-d41f-6ee2-11ab-d241d00a1a9e.2000.1

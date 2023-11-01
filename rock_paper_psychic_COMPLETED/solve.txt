@@ -1,0 +1,63 @@
+Challenge: Rock, Paper, Psychic
+Category: Miscellaneous
+Difficulty: medium
+Author: @HuskyHacks
+Description: Wanna play a game of rock, paper, scissors against a computer that can read your mind? Sounds fun, right?
+
+NOTE: this challenge binary is not malicious, but Windows Defender will likely flag it as malicious anyway. Please don't open it anywhere that you don't want a Defender alert triggering.
+
+Download the file(s) below.
+Attachments: rock_paper_psychic.7z
+
+Solution:
+
+1. Download Cutter on Windows (will be needed for PE debugging)
+2. Open file in Cutter with the following options
+	a. Program: C:\CTF\huntress2023\rock_paper_psychic\rock_paper_psychic.exe
+	b. Analysis: Enabled (Checked)
+	c. Level: Auto-Analysis (aaa)
+	d. Load in write mode (-w): Checked
+	e. Do not load bin information (-n): Unchecked
+	f. Use virtual addressing: Checked
+	g. Import demangled symbols: Checked
+	h. Advanced Options: leave as default
+3. Search through the functions on the left hand side
+	a. Filter for the usual suspects, like "flag"
+	b. Find sym.PrintFlag_main_6 - not much info to go on
+4. Review program and see how a winnier is determined
+	a. sym.determineWinner_main_58
+5. Analyze function
+	a. Rigth click > Show X-refs
+	b. Double click on address 0x00416bdf
+	c. View in Graph display to see a flow chart.
+	d. 0x00416bdf calls "determineWinner__main_48"
+	e. Right click on address 0x00416be6 where we jump to the computer winning > edit > reverse jump
+6. Start debugging (click "Play")
+	a. Click through with the defaults, and no command line arguments
+	b. Proceed to debug by clicking the "fast forward arrow"
+	c. Continue clicking FFW until the program is fully loaded
+	d. Enter your choice such as "rock"
+
+	[#] Hi! I'm Patch, the Telepathic Computer Program.
+	[#] Let's play Rock, Paper, Scissors!
+	[#] I should warn you ahead of time, though.
+	[#] As I previously mentioned, I'm telepathic. So I can read your mind.
+	[#] You won't end up beating me.
+	[#] Still want to play? Alright, you've been warned!
+	[#] Enter your choice (rock, paper, scissors):
+	[>] rock
+	[#] I've made my choice! Now let's play!
+	[#] Ready?
+	[#] ROCK
+	[#] PAPER
+	[#] SCISSORS
+	[#] SHOOT!
+	[#] I chose: paper
+	[#] You chose: rock
+	[#] You won!
+	[#] Wait, how did you do that??!! Cheater! CHEATER!!!!!!
+	[+] flag{35bed450ed9ac9fcb3f5f8d547873be9}
+	[+] Press enter to quit [>]
+
+	e. Flag is returned because the jump to computerWins has been changed to playerWins
+7. Flag: flag{35bed450ed9ac9fcb3f5f8d547873be9}

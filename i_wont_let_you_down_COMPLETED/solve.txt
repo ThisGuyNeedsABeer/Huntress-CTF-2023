@@ -1,0 +1,254 @@
+Challenge: I Wont Let You Down
+Author: @proslasher
+Description: 
+
+OK Go take a look at this IP:
+Connect here: http://155.138.162.158 # USING ANY OTHER TOOL OTHER THAN NMAP WILL DISQUALIFY YOU. DON'T USE BURPSUITE, DON'T USE DIRBUSTER.
+
+Solution: 
+
+1. Navigate to challenge URL: http://155.138.162.158
+2. Discover that the video never loads (there is no spoon)
+3. Nmap the host: nmap -T4 -A -v 155.138.162.158
+
+	a. Output
+
+	Starting Nmap 7.94 ( https://nmap.org ) at 2023-10-05 09:34 Eastern Daylight Time
+	NSE: Loaded 156 scripts for scanning.
+	NSE: Script Pre-scanning.
+	Initiating NSE at 09:34
+	Completed NSE at 09:34, 0.00s elapsed
+	Initiating NSE at 09:34
+	Completed NSE at 09:34, 0.00s elapsed
+	Initiating NSE at 09:34
+	Completed NSE at 09:34, 0.00s elapsed
+	Initiating Ping Scan at 09:34
+	Scanning 155.138.162.158 [4 ports]
+	Completed Ping Scan at 09:34, 0.15s elapsed (1 total hosts)
+	Initiating Parallel DNS resolution of 1 host. at 09:34
+	Completed Parallel DNS resolution of 1 host. at 09:34, 0.15s elapsed
+	Initiating SYN Stealth Scan at 09:34
+	Scanning 155.138.162.158.vultrusercontent.com (155.138.162.158) [1000 ports]
+	Discovered open port 80/tcp on 155.138.162.158
+	Discovered open port 8888/tcp on 155.138.162.158
+	Discovered open port 22/tcp on 155.138.162.158
+	Completed SYN Stealth Scan at 09:34, 12.85s elapsed (1000 total ports)
+	Initiating Service scan at 09:34
+	Scanning 3 services on 155.138.162.158.vultrusercontent.com (155.138.162.158)
+	Completed Service scan at 09:37, 171.20s elapsed (3 services on 1 host)
+	Initiating OS detection (try #1) against 155.138.162.158.vultrusercontent.com (155.138.162.158)
+	Retrying OS detection (try #2) against 155.138.162.158.vultrusercontent.com (155.138.162.158)
+	Initiating Traceroute at 09:37
+	Completed Traceroute at 09:37, 3.06s elapsed
+	Initiating Parallel DNS resolution of 13 hosts. at 09:37
+	Completed Parallel DNS resolution of 13 hosts. at 09:37, 2.52s elapsed
+	NSE: Script scanning 155.138.162.158.
+	Initiating NSE at 09:37
+	Completed NSE at 09:37, 6.82s elapsed
+	Initiating NSE at 09:37
+	Completed NSE at 09:37, 8.92s elapsed
+	Initiating NSE at 09:37
+	Completed NSE at 09:37, 0.00s elapsed
+	Nmap scan report for 155.138.162.158.vultrusercontent.com (155.138.162.158)
+	Host is up (0.078s latency).
+	Not shown: 996 closed tcp ports (reset)
+	PORT     STATE    SERVICE         VERSION
+	22/tcp   open     ssh             OpenSSH 9.0p1 Ubuntu 1ubuntu8.5 (Ubuntu Linux; protocol 2.0)
+	| ssh-hostkey: 
+	|   256 1d:50:c9:4a:d3:c8:f0:5c:43:62:1b:7a:7e:bc:04:52 (ECDSA)
+	|_  256 3d:44:33:b1:1c:e2:e0:ee:70:af:ad:12:9d:db:e3:b6 (ED25519)
+	25/tcp   filtered smtp
+	80/tcp   open     http            Golang net/http server (Go-IPFS json-rpc or InfluxDB API)
+	|_http-title: Hello World!
+	| http-methods: 
+	|_  Supported Methods: GET HEAD POST OPTIONS
+	8888/tcp open     sun-answerbook?
+	| fingerprint-strings: 
+	|   GetRequest: 
+	|     We're no strangers to love
+	|     know the rules and so do I (do I)
+	|     full commitment's what I'm thinking of
+	|     wouldn't get this from any other guy
+	|     just wanna tell you how I'm feeling
+	|     Gotta make you understand
+	|     Never gonna give you up
+	|     Never gonna let you down
+	|     Never gonna run around and desert you
+	|     Never gonna make you cry
+	|     Never gonna say goodbye
+	|     Never gonna tell a lie and hurt you
+	|     We've known each other for so long
+	|     Your heart's been aching, but you're too shy to say it (say it)
+	|     Inside, we both know what's been going on (going on)
+	|     know the game and we're gonna play it
+	|     feeling
+	|     Don't tell me you're too blind to see
+	|     Never gonna give you up
+	|     Never gonna let you down
+	|     Never gonna run around and desert you
+	|     Never gonna make you cry
+	|     Never gonna say goodbye
+	|     Never gonna tell a lie and hurt you
+	|     Never gonna give you up
+	|     Never gonna let you down
+	|     Never gonna run around and dese
+	|   NULL: 
+	|     We're no strangers to love
+	|     know the rules and so do I (do I)
+	|     full commitment's what I'm thinking of
+	|     wouldn't get this from any other guy
+	|     just wanna tell you how I'm feeling
+	|     Gotta make you understand
+	|     Never gonna give you up
+	|     Never gonna let you down
+	|     Never gonna run around and desert you
+	|     Never gonna make you cry
+	|     Never gonna say goodbye
+	|     Never gonna tell a lie and hurt you
+	|     We've known each other for so long
+	|     Your heart's been aching, but you're too shy to say it (say it)
+	|     Inside, we both know what's been going on (going on)
+	|     know the game and we're gonna play it
+	|     feeling
+	|     Don't tell me you're too blind to see
+	|     Never gonna give you up
+	|_    Never gonna let you down
+	1 service unrecognized despite returning data. If you know the service/version, please submit the following fingerprint at https://nmap.org/cgi-bin/submit.cgi?new-service :
+	SF-Port8888-TCP:V=7.94%I=7%D=10/5%Time=651EBB74%P=i686-pc-windows-windows%
+	SF:r(NULL,2B9,"We're\x20no\x20strangers\x20to\x20love\nYou\x20know\x20the\
+	SF:x20rules\x20and\x20so\x20do\x20I\x20\(do\x20I\)\nA\x20full\x20commitmen
+	SF:t's\x20what\x20I'm\x20thinking\x20of\nYou\x20wouldn't\x20get\x20this\x2
+	SF:0from\x20any\x20other\x20guy\nI\x20just\x20wanna\x20tell\x20you\x20how\
+	SF:x20I'm\x20feeling\nGotta\x20make\x20you\x20understand\nNever\x20gonna\x
+	SF:20give\x20you\x20up\nNever\x20gonna\x20let\x20you\x20down\nNever\x20gon
+	SF:na\x20run\x20around\x20and\x20desert\x20you\nNever\x20gonna\x20make\x20
+	SF:you\x20cry\nNever\x20gonna\x20say\x20goodbye\nNever\x20gonna\x20tell\x2
+	SF:0a\x20lie\x20and\x20hurt\x20you\nWe've\x20known\x20each\x20other\x20for
+	SF:\x20so\x20long\nYour\x20heart's\x20been\x20aching,\x20but\x20you're\x20
+	SF:too\x20shy\x20to\x20say\x20it\x20\(say\x20it\)\nInside,\x20we\x20both\x
+	SF:20know\x20what's\x20been\x20going\x20on\x20\(going\x20on\)\nWe\x20know\
+	SF:x20the\x20game\x20and\x20we're\x20gonna\x20play\x20it\nAnd\x20if\x20you
+	SF:\x20ask\x20me\x20how\x20I'm\x20feeling\nDon't\x20tell\x20me\x20you're\x
+	SF:20too\x20blind\x20to\x20see\nNever\x20gonna\x20give\x20you\x20up\nNever
+	SF:\x20gonna\x20let\x20you\x20down\n")%r(GetRequest,4FC,"We're\x20no\x20st
+	SF:rangers\x20to\x20love\nYou\x20know\x20the\x20rules\x20and\x20so\x20do\x
+	SF:20I\x20\(do\x20I\)\nA\x20full\x20commitment's\x20what\x20I'm\x20thinkin
+	SF:g\x20of\nYou\x20wouldn't\x20get\x20this\x20from\x20any\x20other\x20guy\
+	SF:nI\x20just\x20wanna\x20tell\x20you\x20how\x20I'm\x20feeling\nGotta\x20m
+	SF:ake\x20you\x20understand\nNever\x20gonna\x20give\x20you\x20up\nNever\x2
+	SF:0gonna\x20let\x20you\x20down\nNever\x20gonna\x20run\x20around\x20and\x2
+	SF:0desert\x20you\nNever\x20gonna\x20make\x20you\x20cry\nNever\x20gonna\x2
+	SF:0say\x20goodbye\nNever\x20gonna\x20tell\x20a\x20lie\x20and\x20hurt\x20y
+	SF:ou\nWe've\x20known\x20each\x20other\x20for\x20so\x20long\nYour\x20heart
+	SF:'s\x20been\x20aching,\x20but\x20you're\x20too\x20shy\x20to\x20say\x20it
+	SF:\x20\(say\x20it\)\nInside,\x20we\x20both\x20know\x20what's\x20been\x20g
+	SF:oing\x20on\x20\(going\x20on\)\nWe\x20know\x20the\x20game\x20and\x20we'r
+	SF:e\x20gonna\x20play\x20it\nAnd\x20if\x20you\x20ask\x20me\x20how\x20I'm\x
+	SF:20feeling\nDon't\x20tell\x20me\x20you're\x20too\x20blind\x20to\x20see\n
+	SF:Never\x20gonna\x20give\x20you\x20up\nNever\x20gonna\x20let\x20you\x20do
+	SF:wn\nNever\x20gonna\x20run\x20around\x20and\x20desert\x20you\nNever\x20g
+	SF:onna\x20make\x20you\x20cry\nNever\x20gonna\x20say\x20goodbye\nNever\x20
+	SF:gonna\x20tell\x20a\x20lie\x20and\x20hurt\x20you\nNever\x20gonna\x20give
+	SF:\x20you\x20up\nNever\x20gonna\x20let\x20you\x20down\nNever\x20gonna\x20
+	SF:run\x20around\x20and\x20dese");
+	Device type: general purpose
+	Running (JUST GUESSING): Linux 2.6.X|3.X|4.X (85%)
+	OS CPE: cpe:/o:linux:linux_kernel:2.6.32 cpe:/o:linux:linux_kernel:3.10 cpe:/o:linux:linux_kernel:4.4
+	Aggressive OS guesses: Linux 2.6.32 (85%), Linux 2.6.32 or 3.10 (85%), Linux 3.10 - 3.12 (85%), Linux 4.4 (85%), Linux 3.10 (85%)
+	No exact OS matches for host (test conditions non-ideal).
+	Uptime guess: 36.574 days (since Tue Aug 29 19:50:53 2023)
+	Network Distance: 18 hops
+	TCP Sequence Prediction: Difficulty=259 (Good luck!)
+	IP ID Sequence Generation: All zeros
+	Service Info: OS: Linux; CPE: cpe:/o:linux:linux_kernel
+
+	TRACEROUTE (using port 23/tcp)
+	HOP RTT       ADDRESS
+	1   1.00 ms   10.0.30.250
+	2   1.00 ms   lo0-100.PHLAPA-VFTTP-325.verizon-gni.net (71.185.192.1)
+	3   5.00 ms   B3325.PHLAPA-LCR-21.verizon-gni.net (130.81.26.72)
+	4   ...
+	5   1.00 ms   verizonwireless-gw.customer.alter.net (63.65.77.26)
+	6   6.00 ms   nyk-bb1-link.ip.twelve99.net (62.115.121.158)
+	7   6.00 ms   nyk-b7-link.ip.twelve99.net (62.115.143.11)
+	8   7.00 ms   nyk-bb2-link.ip.twelve99.net (62.115.143.16)
+	9   10.00 ms  ash-bb2-link.ip.twelve99.net (62.115.136.201)
+	10  11.00 ms  rest-b6-link.ip.twelve99.net (62.115.140.209)
+	11  11.00 ms  rest-bb1-link.ip.twelve99.net (62.115.140.100)
+	12  25.00 ms  atl-bb1-link.ip.twelve99.net (62.115.138.71)
+	13  23.00 ms  atl-b6-link.ip.twelve99.net (62.115.134.111)
+	14  24.00 ms  constantcompany-ic-357478.ip.twelve99-cust.net (213.248.96.151)
+	15  ... 17
+	18  122.00 ms 155.138.162.158.vultrusercontent.com (155.138.162.158)
+
+	NSE: Script Post-scanning.
+	Initiating NSE at 09:37
+	Completed NSE at 09:37, 0.00s elapsed
+	Initiating NSE at 09:37
+	Completed NSE at 09:37, 0.00s elapsed
+	Initiating NSE at 09:37
+	Completed NSE at 09:37, 0.00s elapsed
+	Read data files from: C:\Program Files (x86)\Nmap
+	OS and Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+	Nmap done: 1 IP address (1 host up) scanned in 213.17 seconds
+	           Raw packets sent: 1194 (54.436KB) | Rcvd: 1872 (124.779KB)
+
+4. nc 155.138.162.158 8888
+
+	a.  We're no strangers to love
+		You know the rules and so do I (do I)
+		A full commitment's what I'm thinking of
+		You wouldn't get this from any other guy
+		I just wanna tell you how I'm feeling
+		Gotta make you understand
+		Never gonna give you up
+		Never gonna let you down
+		Never gonna run around and desert you
+		Never gonna make you cry
+		Never gonna say goodbye
+		Never gonna tell a lie and hurt you
+		We've known each other for so long
+		Your heart's been aching, but you're too shy to say it (say it)
+		Inside, we both know what's been going on (going on)
+		We know the game and we're gonna play it
+		And if you ask me how I'm feeling
+		Don't tell me you're too blind to see
+		Never gonna give you up
+		Never gonna let you down
+		Never gonna run around and desert you
+		Never gonna make you cry
+		Never gonna say goodbye
+		Never gonna tell a lie and hurt you
+		Never gonna give you up
+		Never gonna let you down
+		Never gonna run around and desert you
+		Never gonna make you cry
+		Never gonna say goodbye
+		Never gonna tell a lie and hurt you
+		We've known each other for so long
+		Your heart's been aching, but you're too shy to say it (to say it)
+		Inside, we both know what's been going on (going on)
+		We know the game and we're gonna play it
+		I just wanna tell you how I'm feeling
+		Gotta make you understand
+		Never gonna give you up
+		Never gonna let you down
+		Never gonna run around and desert you
+		Never gonna make you cry
+		Never gonna say goodbye
+		Never gonna tell a lie and hurt you
+		Never gonna give you up
+		Never gonna let you down
+		Never gonna run around and desert you
+		Never gonna make you cry
+		Never gonna say goodbye
+		Never gonna tell a lie and hurt you
+		Never gonna give you up
+		Never gonna let you down
+		Never gonna run around and desert you
+		Never gonna make you cry
+		Never gonna say goodbye
+		Never gonna tell a lie and hurt you
+		flag{93671c2c38ee872508770361ace37b02}
+
+5. Flag is shown at the bottom of the text: flag{93671c2c38ee872508770361ace37b02}
